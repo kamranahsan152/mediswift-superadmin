@@ -30,9 +30,6 @@ const VendorShopDetail = lazy(() => import("src/pages/dashboard/vendor/shop"));
 const VendorShopProduct = lazy(
   () => import("src/pages/dashboard/vendor/productlist")
 );
-const VendorShopCreateProduct = lazy(
-  () => import("src/pages/dashboard/vendor/create")
-);
 
 const ShopListTable = lazy(() => import("src/pages/dashboard/shop/list"));
 const ShopDetailPage = lazy(() => import("src/pages/dashboard/shop/detail"));
@@ -189,10 +186,6 @@ const dashboardRoutes: RouteObject = {
             {
               path: "product-list/:id",
               element: <VendorShopProduct />,
-            },
-            {
-              path: "create-product/:id",
-              element: <VendorShopCreateProduct />,
             },
           ],
         },
