@@ -27,6 +27,4 @@ See the section about [deployment](https://vitejs.dev/guide/static-deploy.html) 
 You can learn more in the [Vite documentation](https://vitejs.dev/guide/).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
-# vendorside
-# mediswift-superadminside
 # mediswift-superadmin
