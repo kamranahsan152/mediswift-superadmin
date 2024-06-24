@@ -3,51 +3,28 @@ import { useCallback, useEffect, useState } from "react";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import Divider from "@mui/material/Divider";
-import Stack from "@mui/material/Stack";
-import Typography from "@mui/material/Typography";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import type { Theme } from "@mui/material/styles/createTheme";
 import { Chip, Box, Skeleton } from "@mui/material";
 import { PropertyList } from "src/components/property-list";
 import { PropertyListItem } from "src/components/property-list-item";
-import SvgIcon from "@mui/material/SvgIcon";
-import UserIcon from "@untitled-ui/icons-react/build/esm/UserCheck01";
-import axios from "axios";
-import toast from "react-hot-toast";
 import { RouterLink } from "src/components/router-link";
 import { paths } from "src/paths";
-import { useGetShopbyIdQuery } from "src/redux/reducer";
-import { useLocation } from "react-router";
+import { useGetAddressByIdQuery, useGetShopbyIdQuery } from "src/redux/reducer";
 
 export const VendorShopDetail = ({ shopId }: any) => {
   const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up("md"));
   const align = mdUp ? "horizontal" : "vertical";
-  const { isLoading, data, isSuccess } = useGetShopbyIdQuery({
+  const { isLoading, data } = useGetShopbyIdQuery({
     id: shopId,
   });
-  // const address = useLocation();
-  const [address, setaddress] = useState("");
+
+  const { data: userLocation } = useGetAddressByIdQuery({ id: shopId });
+  const [address, setAddress] = useState(userLocation || "");
 
   useEffect(() => {
-    const fetchAddress = async () => {
-      if (data && isSuccess) {
-        const url = `https://thingproxy.freeboard.io/fetch/https://nominatim.openstreetmap.org/reverse?format=json&lat=${data?.shop?.location?.Latitude}&lon=${data?.shop?.location?.Longitude}&zoom=18&addressdetails=1`;
-        const response = await fetch(url, {
-          headers: {
-            "Accept-Language": "en-US,en;q=0.9",
-          },
-        });
-        const location = await response.json();
-
-        if (response.ok && location.display_name) {
-          setaddress(location.display_name);
-        }
-      }
-    };
-    fetchAddress();
-  }, [address]);
-
-  // console.log(address);
+    setAddress(userLocation || "");
+  }, [userLocation]);
 
   return (
     <>
@@ -115,8 +92,6 @@ export const VendorShopDetail = ({ shopId }: any) => {
             </Card>
           </Box>
         </>
-      ) : !data.shop ? (
-        <>Not Registered</>
       ) : (
         <Box display={"flex"}>
           <Card

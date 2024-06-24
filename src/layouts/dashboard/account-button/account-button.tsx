@@ -11,19 +11,11 @@ import { AccountPopover } from "./account-popover";
 import { getInitials } from "src/utils/get-initials";
 import { useUserInfoQuery, useVerifyTokenQuery } from "src/redux/reducer";
 import { Alert, Typography } from "@mui/material";
+import { useUserData } from "src/types/global";
 
 export const AccountButton: FC = () => {
   const popover = usePopover<HTMLButtonElement>();
-
-  const { data, isSuccess: isVerifySuccess } = useVerifyTokenQuery("");
-
-  const { data: userInfo, isLoading } = useUserInfoQuery({
-    id: isVerifySuccess && data?.decoded?.user?.id,
-  });
-
-  if (isLoading) {
-    return <Typography variant="body1">Loading...</Typography>;
-  }
+  const user = useUserData();
 
   return (
     <>
@@ -48,14 +40,14 @@ export const AccountButton: FC = () => {
             width: 40,
           }}
         >
-          {getInitials(userInfo?.user?.name)}
+          {getInitials(user?.name)}
           {/* <SvgIcon>
             <User01Icon />
           </SvgIcon> */}
         </Avatar>
       </Box>
       <AccountPopover
-        userInfo={userInfo}
+        userInfo={user}
         anchorEl={popover.anchorRef.current}
         onClose={popover.handleClose}
         open={popover.open}

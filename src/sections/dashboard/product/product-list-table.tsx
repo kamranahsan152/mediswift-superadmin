@@ -474,12 +474,7 @@ export const ProductListTable = () => {
                                     width: 80,
                                   }}
                                 >
-                                  <img
-                                    height={100}
-                                    width={100}
-                                    src={url}
-                                    alt={product.Images.contentType}
-                                  />
+                                  <img height={100} width={100} src={url} />
                                 </Box>
 
                                 <Box

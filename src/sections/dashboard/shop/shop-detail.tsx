@@ -9,8 +9,9 @@ import { PropertyList } from "src/components/property-list";
 import { PropertyListItem } from "src/components/property-list-item";
 import { RouterLink } from "src/components/router-link";
 import { paths } from "src/paths";
-import { useGetShopbyIdQuery } from "src/redux/reducer";
+import { useGetAddressByIdQuery, useGetShopbyIdQuery } from "src/redux/reducer";
 import { useLocation } from "react-router";
+import { useEffect, useState } from "react";
 
 export const ShopDetail = ({ shopId }: any) => {
   const mdUp = useMediaQuery((theme: Theme) => theme.breakpoints.up("md"));
@@ -19,8 +20,14 @@ export const ShopDetail = ({ shopId }: any) => {
     id: shopId,
   });
 
-  const location = useLocation();
-  const address = location.state.location;
+  const { data: userLocation, isLoading: isloadLocation } =
+    useGetAddressByIdQuery({ id: shopId });
+  console.log(userLocation);
+  const [address, setAddress] = useState(userLocation || "");
+
+  useEffect(() => {
+    setAddress(userLocation || "");
+  }, [userLocation]);
 
   return (
     <>

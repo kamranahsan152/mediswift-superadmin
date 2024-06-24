@@ -405,9 +405,12 @@ export const VendorListTable = (props: any) => {
                                 cursor: "pointer",
                               }}
                               onClick={() =>
-                                handleDetail({
-                                  id: vendor?._id,
-                                })
+                                router(
+                                  paths.superadmin.vendors.details.replace(
+                                    ":id",
+                                    vendor._id
+                                  )
+                                )
                               }
                               variant="subtitle2"
                             >

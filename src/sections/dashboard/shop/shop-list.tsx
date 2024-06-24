@@ -1,19 +1,8 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import {
-  useEffect,
-  useState,
-  type ChangeEvent,
-  type FC,
-  type MouseEvent,
-} from "react";
-import numeral from "numeral";
-import PropTypes from "prop-types";
+/* eslint-disable react-hooks/rules-of-hooks */
+import { useCallback, useEffect, useState } from "react";
 import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
-import Edit02Icon from "@untitled-ui/icons-react/build/esm/Edit02";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Checkbox from "@mui/material/Checkbox";
 import IconButton from "@mui/material/IconButton";
 import Link from "@mui/material/Link";
 import Stack from "@mui/material/Stack";
@@ -26,14 +15,13 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/DeleteOutlineRounded";
-import { RouterLink } from "src/components/router-link";
 import { Scrollbar } from "src/components/scrollbar";
 import { paths } from "src/paths";
 import { getInitials } from "src/utils/get-initials";
-import axios from "axios";
 import toast from "react-hot-toast";
 import {
   Chip,
+  CircularProgress,
   InputAdornment,
   OutlinedInput,
   Skeleton,
@@ -41,11 +29,15 @@ import {
 } from "@mui/material";
 import NoDataIcon from "@mui/icons-material/Error";
 import SearchMdIcon from "@untitled-ui/icons-react/build/esm/SearchMd";
-import { useRouter } from "src/hooks/use-router";
-import { useDeleteShopsMutation, useGetAllShopsQuery } from "src/redux/reducer";
+import {
+  useDeleteShopsMutation,
+  useGetAddressMutation,
+  useGetAllShopsQuery,
+  useLazyGetAddressByIdQuery,
+} from "src/redux/reducer";
 import { useNavigate } from "react-router";
 
-export const ShopListTable = (props: any) => {
+export const ShopListTable = () => {
   const { isLoading, isSuccess, isError, data, refetch } =
     useGetAllShopsQuery("");
 
@@ -56,15 +48,26 @@ export const ShopListTable = (props: any) => {
   }>({
     fn: (items) => items,
   });
+  const pages = [5, 10, 25];
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(pages[page]);
+  const handleChangePage = (event: any, newPage: any) => {
+    setPage(newPage);
+  };
 
-  const ShopAPI = () => {
+  const handleChangeRowsPerPage = (event: any) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const ShopAPI = useCallback(() => {
     return (
       data &&
       filter
         .fn(isSuccess && data.result)
         ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
     );
-  };
+  }, [data, filter, isSuccess, page, rowsPerPage]);
 
   const [searchTerm, setSearchTerm] = useState("");
   useEffect(() => {
@@ -81,57 +84,46 @@ export const ShopListTable = (props: any) => {
     });
   }, [searchTerm]);
 
-  const pages = [5, 10, 25];
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(pages[page]);
-  const handleChangePage = (event: any, newPage: any) => {
-    setPage(newPage);
-  };
+  const [getAddress] = useGetAddressMutation();
+  const [trigger, { isLoading: isloadLocation }] = useLazyGetAddressByIdQuery();
 
-  const handleChangeRowsPerPage = (event: any) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
   const [Address, setAddress] = useState<{
-    [key: number]: { address: string };
+    [key: string]: { address: string };
   }>({});
 
-  const FetchAddress = async (id: any, index: any) => {
-    const userIndex = ShopAPI()?.findIndex((item: any) => item._id === id);
-
-    if (userIndex === index) {
-      try {
-        const url = `https://thingproxy.freeboard.io/fetch/https://nominatim.openstreetmap.org/reverse?format=json&lat=${
-          ShopAPI()[index]?.location?.Latitude
-        }&lon=${
-          ShopAPI()[index]?.location?.Longitude
-        }&zoom=18&addressdetails=1`;
-        const response = await fetch(url, {
-          headers: {
-            "Accept-Language": "en-US,en;q=0.9",
-          },
-        });
-        const data = await response.json();
-
-        if (response.ok && data.display_name) {
-          setAddress((prev) => {
-            return {
-              ...prev,
-              [index]: {
-                address: data.display_name,
-              },
-            };
-          });
+  useEffect(() => {
+    const fetchAddresses = async () => {
+      for (const shop of ShopAPI()) {
+        if (shop?._id) {
+          try {
+            const result = await trigger({ id: shop._id }).unwrap();
+            if (result) {
+              setAddress((prev) => {
+                return {
+                  ...prev,
+                  [shop._id]: {
+                    address: result,
+                  },
+                };
+              });
+            }
+          } catch (error) {
+            console.error(
+              `Failed to fetch address for shop ID ${shop._id}:`,
+              error
+            );
+          }
+        } else {
+          console.warn("Shop ID is undefined:", shop);
         }
-      } catch (error) {
-        console.error("Error fetching address:", error);
       }
+    };
+
+    if (ShopAPI() && ShopAPI()?.length > 0) {
+      fetchAddresses();
     }
+  }, [ShopAPI, trigger]);
 
-    return userIndex;
-  };
-
-  //
   const handleDeleteShop = async ({ id }: any) => {
     try {
       const response = await deleteshop({ id }).unwrap();
@@ -210,10 +202,8 @@ export const ShopListTable = (props: any) => {
   };
 
   const router = useNavigate();
-  const handleDetail = ({ id, location }: any) => {
-    router(paths.superadmin.shops.detail.replace(":id", id), {
-      state: { location },
-    });
+  const handleDetail = ({ id }: any) => {
+    router(paths.superadmin.shops.detail.replace(":id", id));
   };
   return (
     <>
@@ -271,7 +261,6 @@ export const ShopListTable = (props: any) => {
                 SkeletonTable()
               ) : isSuccess && ShopAPI().length > 0 ? (
                 ShopAPI().map((shop: any, index: any) => {
-                  FetchAddress(shop._id, index);
                   return (
                     <TableRow hover key={shop._id}>
                       <TableCell>
@@ -296,7 +285,6 @@ export const ShopListTable = (props: any) => {
                               onClick={() =>
                                 handleDetail({
                                   id: shop?._id,
-                                  location: Address[index]?.address,
                                 })
                               }
                               variant="subtitle2"
@@ -360,7 +348,11 @@ export const ShopListTable = (props: any) => {
                         )}
                       </TableCell>
                       <TableCell>
-                        {Address[index]?.address || "Loading..."}
+                        {Address[shop._id]?.address ? (
+                          Address[shop._id]?.address
+                        ) : (
+                          <CircularProgress size={20} color="primary" />
+                        )}
                       </TableCell>
                       <TableCell
                         sx={{

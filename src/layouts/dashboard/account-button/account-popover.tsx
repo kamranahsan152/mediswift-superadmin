@@ -53,9 +53,9 @@ export const AccountPopover: FC<AccountPopoverProps> = (props) => {
       {...other}
     >
       <Box sx={{ p: 2 }}>
-        <Typography variant="body1">{userInfo?.user?.name}</Typography>
+        <Typography variant="body1">{userInfo?.name}</Typography>
         <Typography color="text.secondary" variant="body2">
-          {userInfo?.user?.email}
+          {userInfo?.email}
         </Typography>
       </Box>
       <Divider />

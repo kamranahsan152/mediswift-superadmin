@@ -39,6 +39,16 @@ export const API = createApi({
         method: "DELETE",
       }),
     }),
+    getAddress: builder.mutation({
+      query: ({ body }) => ({
+        url: "get-address",
+        method: "POST",
+        body: body,
+      }),
+    }),
+    getAddressById: builder.query({
+      query: ({ id }) => `getaddress/${id}`,
+    }),
     // Admins
     getAlladmin: builder.query({
       query: () => "alladmins",
@@ -139,4 +149,7 @@ export const {
   useGetAllTransactionsQuery,
   useLazyGetAllPaymentsQuery,
   useWalletQuery,
+  useGetAddressMutation,
+  useGetAddressByIdQuery,
+  useLazyGetAddressByIdQuery,
 } = API;
