@@ -12,7 +12,6 @@ import { Seo } from "src/components/seo";
 import { usePageView } from "src/hooks/use-page-view";
 import { useSettings } from "src/hooks/use-settings";
 import { OverviewBanner } from "src/sections/dashboard/overview/overview-banner";
-import { OverviewDoneTasks } from "src/sections/dashboard/overview/overview-done-tasks";
 import { OverviewEvents } from "src/sections/dashboard/overview/overview-events";
 import { OverviewInbox } from "src/sections/dashboard/overview/overview-inbox";
 import { OverviewTransactions } from "src/sections/dashboard/overview/overview-transactions";
@@ -22,6 +21,7 @@ import { OverviewHelp } from "src/sections/dashboard/overview/overview-help";
 import { OverviewJobs } from "src/sections/dashboard/overview/overview-jobs";
 import { OverviewOpenTickets } from "src/sections/dashboard/overview/overview-open-tickets";
 import { OverviewTips } from "src/sections/dashboard/overview/overview-tips";
+import { OverviewCustomer } from "src/sections/dashboard/overview/overview-customers";
 
 const now = new Date();
 
@@ -54,24 +54,10 @@ const Page = () => {
                 <div>
                   <Typography variant="h4">Overview</Typography>
                 </div>
-                <div>
-                  <Stack direction="row" spacing={4}>
-                    <Button
-                      startIcon={
-                        <SvgIcon>
-                          <PlusIcon />
-                        </SvgIcon>
-                      }
-                      variant="contained"
-                    >
-                      New Dashboard
-                    </Button>
-                  </Stack>
-                </div>
               </Stack>
             </Grid>
             <Grid xs={12} md={4}>
-              <OverviewDoneTasks amount={31} />
+              <OverviewCustomer amount={31} />
             </Grid>
             <Grid xs={12} md={4}>
               <OverviewPendingIssues amount={12} />

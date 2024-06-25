@@ -9,14 +9,13 @@ import { usePopover } from "src/hooks/use-popover";
 
 import { AccountPopover } from "./account-popover";
 import { getInitials } from "src/utils/get-initials";
-import { useUserInfoQuery, useVerifyTokenQuery } from "src/redux/reducer";
-import { Alert, Typography } from "@mui/material";
+// import { useUserInfoQuery, useVerifyTokenQuery } from "src/redux/reducer";
+// import { Alert, Typography } from "@mui/material";
 import { useUserData } from "src/types/global";
 
 export const AccountButton: FC = () => {
   const popover = usePopover<HTMLButtonElement>();
   const user = useUserData();
-
   return (
     <>
       <Box

@@ -50,7 +50,8 @@ const SuccessPage = lazy(() => import("src/pages/status"));
 // const PaymentDetailPage = lazy(() => import("src/pages/dashboard/payments/detaiil"));
 
 const AccountPage = lazy(() => import("src/pages/dashboard/account"));
-const EcommercePage = lazy(() => import("src/pages/dashboard/ecommerce"));
+// const EcommercePage = lazy(() => import("src/pages/dashboard/ecommerce"));
+const OverView = lazy(() => import("src/pages/dashboard/index"));
 const LoginPage = lazy(() => import("src/pages/auth/login"));
 const PaymentPage = lazy(() => import("src/pages/paymentgateway"));
 export const routes: RouteObject[] = [
@@ -133,7 +134,7 @@ const dashboardRoutes: RouteObject = {
   children: [
     {
       index: true,
-      element: <EcommercePage />,
+      element: <OverView />,
     },
     {
       path: "admins",

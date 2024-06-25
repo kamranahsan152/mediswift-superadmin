@@ -152,4 +152,5 @@ export const {
   useGetAddressMutation,
   useGetAddressByIdQuery,
   useLazyGetAddressByIdQuery,
+  useLazyUserInfoQuery,
 } = API;

@@ -22,7 +22,6 @@ export const ShopDetail = ({ shopId }: any) => {
 
   const { data: userLocation, isLoading: isloadLocation } =
     useGetAddressByIdQuery({ id: shopId });
-  console.log(userLocation);
   const [address, setAddress] = useState(userLocation || "");
 
   useEffect(() => {

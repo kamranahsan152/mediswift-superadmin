@@ -75,62 +75,6 @@ const Page = () => {
           console.clear();
           setloading(false);
         }
-
-        // try {
-        //   const response = await fetch("http://localhost:4000/api/v1/login", {
-        //     method: "POST",
-        //     headers: { "Content-Type": "application/json" },
-        //     body: JSON.stringify({
-        //       email: values.email,
-        //       password: values.password,
-        //     }),
-        //     credentials: "include",
-        //   });
-
-        //   if (!response.ok) {
-        //     console.error(`Error: ${response.status} ${response.statusText}`);
-
-        //     const data = await response.json();
-        //     toast.error(data.message);
-        //   } else {
-        //     const data = await response.json();
-        //     localStorage.setItem("admintoken", data.authToken);
-        //     const { role } = data.user;
-        //     if (role === "super-admin") {
-        //       console.log("Login access granted!");
-        //       router(paths.superadmin.index, { replace: true });
-        //       dispatch({
-        //         type: "USER",
-        //         payload: {
-        //           role: role,
-        //         },
-        //       });
-        //       const encryptedRole = role.split("").reverse().join("");
-        //       localStorage.setItem(
-        //         "authStateAdmin",
-        //         JSON.stringify({
-        //           role: role,
-        //         })
-        //       );
-        //       toast.success("Logged-in Successfully");
-        //     } else if (role === "admin" || role === "vendor") {
-        //       Cookies.remove("token");
-        //       localStorage.removeItem("admintoken");
-        //       localStorage.removeItem("authStateAdmin");
-        //       console.log("You are not allowed to access");
-        //       setloading(false);
-        //       toast.error("Please enter a valid login, for super-admin");
-        //     } else {
-        //       setloading(false);
-        //       toast.error("Invalid email or password!");
-        //     }
-        //   }
-        // } catch (error) {
-        //   console.error("Fetch error:", error);
-        // } finally {
-        //   setloading(false);
-        //   console.clear();
-        // }
       })
       .catch((err) => {
         const newErrors: { [key: string]: string } = {};
