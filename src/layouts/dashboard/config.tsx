@@ -58,21 +58,21 @@ export const useSections = () => {
       {
         subheader: t(tokens.nav.concepts),
         items: [
-          {
-            title: t(tokens.nav.admins),
-            path: paths.superadmin.admins.list,
-            icon: (
-              <SvgIcon fontSize="small">
-                <Users03Icon />
-              </SvgIcon>
-            ),
-            items: [
-              {
-                title: t(tokens.nav.list),
-                path: paths.superadmin.admins.list,
-              },
-            ],
-          },
+          // {
+          //   title: t(tokens.nav.admins),
+          //   path: paths.superadmin.admins.list,
+          //   icon: (
+          //     <SvgIcon fontSize="small">
+          //       <Users03Icon />
+          //     </SvgIcon>
+          //   ),
+          //   items: [
+          //     {
+          //       title: t(tokens.nav.list),
+          //       path: paths.superadmin.admins.list,
+          //     },
+          //   ],
+          // },
           {
             title: t(tokens.nav.customers),
             path: paths.superadmin.customers.index,
