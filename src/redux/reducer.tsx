@@ -13,6 +13,7 @@ export const API = createApi({
       return headers;
     },
   }),
+  tagTypes: ["Admin", "Shop", "Rider", "Payment"],
   endpoints: (builder) => ({
     //login
     Login: builder.mutation({
@@ -52,6 +53,7 @@ export const API = createApi({
     // Admins
     getAlladmin: builder.query({
       query: () => "alladmins",
+      providesTags: ["Admin"],
     }),
     createAdmin: builder.mutation({
       query: ({ body }) => ({
@@ -59,7 +61,9 @@ export const API = createApi({
         method: "POST",
         body: body,
       }),
+      invalidatesTags: ["Admin"],
     }),
+
     getUserById: builder.query({
       query: ({ id }) => `thisuseraadmin/${id}`,
     }),
@@ -80,12 +84,23 @@ export const API = createApi({
     getAllVendors: builder.query({
       query: () => "allvendorsadmins",
     }),
+
+    approveShop: builder.mutation({
+      query: ({ id, body }) => ({
+        url: `approve-shop/${id}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["Shop"],
+    }),
     //shop
     getShopbyId: builder.query({
       query: ({ id }) => `singleshop/${id}`,
+      providesTags: ["Shop"],
     }),
     getAllShops: builder.query({
       query: () => "allshops",
+      providesTags: ["Shop"],
     }),
     deleteShops: builder.mutation({
       query: ({ id }) => ({
@@ -95,6 +110,7 @@ export const API = createApi({
     }),
     getallRiders: builder.query({
       query: () => "allriders",
+      providesTags: ["Rider"],
     }),
     getRiderById: builder.query({
       query: ({ id }) => `admin/rider/detail/${id}`,
@@ -104,6 +120,7 @@ export const API = createApi({
         url: `rider/delete/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["Rider"],
     }),
     addRider: builder.mutation({
       query: ({ body }) => ({
@@ -111,16 +128,28 @@ export const API = createApi({
         method: "POST",
         body: body,
       }),
+      invalidatesTags: ["Rider"],
     }),
     //payment
     getAllPayments: builder.query({
       query: () => "paymentlist",
+      providesTags: ["Payment"],
+    }),
+    createPayment: builder.mutation({
+      query: ({ body }) => ({
+        url: `create-payment-intent`,
+        method: "POST",
+        body,
+      }),
+      invalidatesTags: ["Payment"],
     }),
     wallet: builder.query({
       query: () => "super-admin-wallet",
+      providesTags: ["Payment"],
     }),
     getAllTransactions: builder.query({
       query: () => "alltransactions",
+      providesTags: ["Payment"],
     }),
   }),
 });
@@ -153,4 +182,7 @@ export const {
   useGetAddressByIdQuery,
   useLazyGetAddressByIdQuery,
   useLazyUserInfoQuery,
+  useLazyGetShopbyIdQuery,
+  useApproveShopMutation,
+  useCreatePaymentMutation,
 } = API;

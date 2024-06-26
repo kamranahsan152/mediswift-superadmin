@@ -13,4 +13,16 @@ const PublicRoute: React.FC = () => {
   return <Outlet />;
 };
 
-export default PublicRoute;
+const IndexPublicRoute: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
+  const { isAuthenticated } = useSelector((state: RootState) => state.user);
+
+  if (isAuthenticated) {
+    return <Navigate to="/superadmin" />;
+  }
+
+  return <>{children}</>;
+};
+
+export { IndexPublicRoute, PublicRoute };

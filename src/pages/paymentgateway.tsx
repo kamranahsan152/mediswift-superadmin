@@ -36,32 +36,10 @@ const stripePromise = loadStripe(
 const Page: React.FC = () => {
   const location = useLocation();
   const state = location.state;
-  const vendorId = state?.vendorId;
+  // const vendorId = state?.vendorId;
+  const sessionId = state?.sessionId;
 
-  const authtoken = localStorage.getItem("token");
-  const [sessionId, setSessionId] = useState<string | null>(null);
-  const router = useNavigate();
-
-  const fetchSession = async () => {
-    const response = await fetch(
-      `http://localhost:4000/api/v1/create-payment-intent/${vendorId}`,
-      {
-        headers: {
-          Authorization: `${authtoken}`,
-        },
-      }
-    );
-    const data = await response.json();
-    if (response.ok) {
-      setSessionId(data.clientSecret);
-    } else {
-      console.clear();
-      toast.error(data.error);
-      router("/cancel", { state: { paymentStatus: data.error } });
-    }
-  };
-
-  fetchSession();
+  // fetchSession();
 
   return state ? (
     <Elements stripe={stripePromise}>

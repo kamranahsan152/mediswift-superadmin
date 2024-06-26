@@ -305,7 +305,7 @@ export const ShopListTable = () => {
                       </TableCell>
                       <TableCell>{shop?.Cnic}</TableCell>
                       <TableCell>
-                        {" "}
+                        {/* {shop?.isapproved} */}
                         {shop?.isapproved === "false" && (
                           <Chip
                             size="small"
@@ -336,7 +336,7 @@ export const ShopListTable = () => {
                             }
                           />
                         )}
-                        {shop?.isapproved === "Blocked" && (
+                        {shop?.isapproved === "blocked" && (
                           <Chip
                             size="small"
                             color="warning"

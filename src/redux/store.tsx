@@ -23,9 +23,9 @@ export const store = configureStore({
   reducer: persisted,
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
+      immutableCheck: false,
       serializableCheck: false,
     }).concat(API.middleware),
-  devTools: process.env.NODE_ENV !== "production",
 });
 
 export type AppDispatch = typeof store.dispatch;

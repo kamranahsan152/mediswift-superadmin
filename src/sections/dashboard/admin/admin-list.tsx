@@ -31,9 +31,10 @@ import { useRouter } from "src/hooks/use-router";
 import { useDeleteuserMutation, useGetAlladminQuery } from "src/redux/reducer";
 import { User } from "src/types/user";
 
-export const AdminList = (props: any) => {
+export const AdminList = () => {
   const { data, isLoading, isSuccess, isError, refetch } =
     useGetAlladminQuery("");
+
   const [deleteadmin] = useDeleteuserMutation();
 
   const [filter, setFilter] = useState<{
@@ -42,18 +43,18 @@ export const AdminList = (props: any) => {
     fn: (items) => items,
   });
 
-  const AdminDataApi = () => {
-    return filter
-      .fn(isSuccess && data.user)
-      .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
-  };
-
   const pages = [5, 10, 25];
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(pages[page]);
   const handleChangePage = (event: any, newPage: any) => {
     setPage(newPage);
   };
+
+  const AdminDataApi = filter.fn(data?.user || []);
+  const paginatedData = AdminDataApi.slice(
+    page * rowsPerPage,
+    page * rowsPerPage + rowsPerPage
+  );
 
   const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10));
@@ -193,8 +194,8 @@ export const AdminList = (props: any) => {
               <>
                 {isLoading ? (
                   SkeletonTable()
-                ) : isSuccess && AdminDataApi()?.length > 0 ? (
-                  AdminDataApi()?.map((admin: any, index: any) => {
+                ) : isSuccess && paginatedData?.length > 0 ? (
+                  paginatedData?.map((admin: any, index: any) => {
                     return (
                       <TableRow hover key={index}>
                         <TableCell>
@@ -249,7 +250,9 @@ export const AdminList = (props: any) => {
                               </SvgIcon>
                             </Tooltip>
                           </IconButton>
-                          <IconButton onClick={() => handleDetail(admin?._id)}>
+                          <IconButton
+                            onClick={() => handleDetail({ id: admin?._id })}
+                          >
                             <Tooltip title="Admin Detail">
                               <SvgIcon>
                                 <ArrowRightIcon />
@@ -324,7 +327,7 @@ export const AdminList = (props: any) => {
         </Scrollbar>
         <TablePagination
           component="div"
-          count={AdminDataApi.length}
+          count={paginatedData?.length || 0}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           page={page}

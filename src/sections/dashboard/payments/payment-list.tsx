@@ -15,12 +15,8 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import Typography from "@mui/material/Typography";
 import Cancel from "@mui/icons-material/CancelRounded";
-import DeleteIcon from "@mui/icons-material/DeleteOutlineRounded";
 import { Scrollbar } from "src/components/scrollbar";
-import { paths } from "src/paths";
 import { getInitials } from "src/utils/get-initials";
-import axios from "axios";
-import toast from "react-hot-toast";
 import {
   Card,
   CardHeader,
@@ -44,7 +40,11 @@ import type { Theme } from "@mui/material/styles/createTheme";
 import { loadStripe } from "@stripe/stripe-js";
 import { useNavigate } from "react-router";
 import { GetToken } from "src/types/global";
-import { useGetAllPaymentsQuery } from "src/redux/reducer";
+import {
+  useCreatePaymentMutation,
+  useGetAllPaymentsQuery,
+} from "src/redux/reducer";
+import toast from "react-hot-toast";
 
 export const PaymentList = () => {
   const [open, setOpen] = React.useState(false);
@@ -167,6 +167,41 @@ export const PaymentList = () => {
   };
 
   const router = useNavigate();
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [createPayment] = useCreatePaymentMutation();
+  // const router = useNavigate();
+
+  const handleClick = async ({ vendorId }: any) => {
+    try {
+      const body = {
+        id: vendorId,
+      };
+      const reponse = await createPayment({ body }).unwrap();
+      setSessionId(reponse.clientSecret);
+    } catch (error) {
+      console.log(error.error);
+      toast.error(error.error);
+      router("/cancel", { state: { paymentStatus: error.error } });
+    }
+
+    // const response = await fetch(
+    //   `http://localhost:4000/api/v1/create-payment-intent/${vendorId}`,
+    //   {
+    //     headers: {
+    //       Authorization: `${authtoken}`,
+    //     },
+    //   }
+    // );
+    // const data = await response.json();
+    // if (response.ok) {
+    //   setSessionId(data.clientSecret);
+    // } else {
+    //   // console.clear();
+    //   toast.error(data.error);
+    //   router("/cancel", { state: { paymentStatus: data.error } });
+    // }
+  };
+
   //make payment
 
   // const makePayment = async ({ vendorId }: any) => {
@@ -469,10 +504,13 @@ export const PaymentList = () => {
                                 );
                                 router("/paymentgateway", {
                                   state: {
-                                    vendorId: payment?.vender_shop_id,
+                                    // vendorId: payment?.vender_shop_id,
                                     items: items,
                                     totalPrice: totalPrice,
                                   },
+                                });
+                                handleClick({
+                                  vendorId: payment?.vender_shop_id,
                                 });
                               }
                             }

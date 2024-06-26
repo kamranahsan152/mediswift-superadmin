@@ -47,15 +47,6 @@ export const RiderList = (props: any) => {
     fn: (items) => items,
   });
 
-  const RiderAPI = () => {
-    return (
-      data &&
-      filter
-        .fn(isSuccess && data.data)
-        ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-    );
-  };
-
   const pages = [5, 10, 25];
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(pages[page]);
@@ -66,6 +57,15 @@ export const RiderList = (props: any) => {
   const handleChangeRowsPerPage = (event: any) => {
     setRowsPerPage(parseInt(event.target.value, 10));
     setPage(0);
+  };
+
+  const RiderAPI = () => {
+    return (
+      data &&
+      filter
+        .fn(data?.data)
+        ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+    );
   };
 
   const handleRiderDelete = async ({ id }: any) => {
@@ -336,7 +336,7 @@ export const RiderList = (props: any) => {
         </Scrollbar>
         <TablePagination
           component="div"
-          count={data?.length || 0}
+          count={RiderAPI()?.length || 0}
           onPageChange={handleChangePage}
           onRowsPerPageChange={handleChangeRowsPerPage}
           page={page}

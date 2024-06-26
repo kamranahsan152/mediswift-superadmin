@@ -20,7 +20,6 @@ import ExpandMore from "@mui/icons-material/ExpandMoreOutlined";
 import { Scrollbar } from "src/components/scrollbar";
 import { paths } from "src/paths";
 import { getInitials } from "src/utils/get-initials";
-import axios from "axios";
 import toast from "react-hot-toast";
 import {
   Alert,
@@ -43,18 +42,15 @@ import Cancel from "@mui/icons-material/CancelRounded";
 import SearchMdIcon from "@untitled-ui/icons-react/build/esm/SearchMd";
 import { useRouter } from "src/hooks/use-router";
 import {
+  useApproveShopMutation,
   useDeleteuserMutation,
   useGetAllVendorsQuery,
+  useLazyGetShopbyIdQuery,
 } from "src/redux/reducer";
-import { GetToken } from "src/types/global";
 import { useNavigate } from "react-router";
 
-export const VendorListTable = (props: any) => {
+export const VendorListTable = () => {
   const ApprovalType = [
-    // {
-    //   icon: <False />,
-    //   name: "false",
-    // },
     {
       icon: <Done />,
       name: "approved",
@@ -68,6 +64,16 @@ export const VendorListTable = (props: any) => {
       name: "Canceled",
     },
   ];
+
+  const [trigger] = useLazyGetShopbyIdQuery();
+  const [approveShop] = useApproveShopMutation();
+
+  const [shop_data, setShopData] = useState<{
+    [key: number]: {
+      approvalStatus: string;
+      icon: any;
+    };
+  }>({});
 
   const [selectedValues, setSelectedValues] = useState<{
     [key: string]: { icon: React.ReactNode; name: string };
@@ -92,6 +98,34 @@ export const VendorListTable = (props: any) => {
         .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
     );
   };
+  useEffect(() => {
+    if (data) {
+      data?.vendor?.map(async (vendor: any, index: number) => {
+        if (vendor?.shops?.length > 0) {
+          const id = vendor?.shops[0];
+          const { data } = await trigger({ id });
+
+          let icon = <Done />;
+
+          if (data?.shop?.isapproved === "blocked") {
+            icon = <Block />;
+          } else if (data?.shop?.isapproved === "Canceled") {
+            icon = <Cancel />;
+          }
+
+          setShopData((prevShopData: any) => {
+            return {
+              ...prevShopData,
+              [index]: {
+                approvalStatus: data?.shop?.isapproved,
+                icon: icon,
+              },
+            };
+          });
+        }
+      });
+    }
+  }, [trigger, data]);
 
   const pages = [5, 10, 25];
   const [page, setPage] = useState(0);
@@ -212,120 +246,49 @@ export const VendorListTable = (props: any) => {
         name: type.name,
       };
       if (newValue.name === "approved") {
-        const resp = axios.get(`${paths.BASE_URL}approve/${id}`, {
-          withCredentials: true,
-          headers: { authorization: GetToken() },
-        });
-        resp
-          .then((result) => {
-            if (result) {
-              const { message } = result.data;
-              if (message === "Shop has been approved already!")
-                return toast.custom(
-                  <>
-                    <Box
-                      style={{
-                        boxShadow:
-                          "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
-                        borderRadius: "8px",
-                        backgroundColor: "#ffffff",
-                      }}
-                    >
-                      <Alert
-                        variant="filled"
-                        severity="warning"
-                        style={{
-                          color: "white",
-                        }}
-                      >
-                        {message}
-                      </Alert>
-                    </Box>
-                  </>,
-                  { duration: 2000 }
-                );
-              else return toast.success(message);
-            }
-          })
-          .catch((err) => {
-            toast.error(err);
-          });
+        try {
+          const body = {
+            approval: newValue.name,
+          };
+          approveShop({ id, body })
+            .unwrap()
+            .then((response) => {
+              toast.success(response.message);
+            });
+        } catch (error) {
+          console.log(error);
+          toast.error(error.message);
+        }
       }
       if (newValue.name === "Canceled") {
-        const resp = axios.get(`${paths.BASE_URL}cancel/${id}`, {
-          withCredentials: true,
-          headers: { authorization: GetToken() },
-        });
-        resp
-          .then((result) => {
-            if (result) {
-              const { message } = result.data;
-              if (message === "Shop approval has been canceled already")
-                return toast.custom(
-                  <>
-                    <Box
-                      style={{
-                        boxShadow:
-                          "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
-                        borderRadius: "8px",
-                        backgroundColor: "#ffffff",
-                      }}
-                    >
-                      <Alert
-                        color="warning"
-                        variant="standard"
-                        severity="warning"
-                      >
-                        {message}
-                      </Alert>
-                    </Box>
-                  </>,
-                  { duration: 2000 }
-                );
-              else return toast.error(message);
-            }
-          })
-          .catch((err) => {
-            toast.error(err);
-          });
+        try {
+          const body = {
+            approval: newValue.name,
+          };
+          approveShop({ id, body })
+            .unwrap()
+            .then((response) => {
+              toast.error(response.message);
+            });
+        } catch (error) {
+          console.log(error);
+          toast.error(error.message);
+        }
       }
       if (newValue.name === "blocked") {
-        const resp = axios.get(`${paths.BASE_URL}block/${id}`, {
-          withCredentials: true,
-          headers: { authorization: GetToken() },
-        });
-        resp
-          .then((result) => {
-            if (result) {
-              const { message } = result.data;
-              if (message === "Shop has been blocked already!")
-                return toast.custom(
-                  <>
-                    <Box
-                      style={{
-                        boxShadow:
-                          "rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px",
-                        borderRadius: "8px",
-                        backgroundColor: "#ffffff",
-                      }}
-                    >
-                      <Alert
-                        color="warning"
-                        variant="standard"
-                        severity="warning"
-                      >
-                        {message}
-                      </Alert>
-                    </Box>
-                  </>,
-                  { duration: 2000 }
-                );
-              else return toast.error(message);
-            }
-          })
-          .catch((err) => {
-            toast.error(err);
-          });
+        try {
+          const body = {
+            approval: newValue.name,
+          };
+          approveShop({ id, body })
+            .unwrap()
+            .then((response) => {
+              toast.error(response.message);
+            });
+        } catch (error) {
+          console.log(error);
+          toast.error(error.message);
+        }
       }
       return {
         ...prevSelectedValues,
@@ -375,7 +338,9 @@ export const VendorListTable = (props: any) => {
                 <TableCell>Phone Number</TableCell>
                 <TableCell>Role</TableCell>
                 <TableCell>Shop Approval</TableCell>
-                <TableCell align="right">Actions</TableCell>
+                <TableCell align="right" width={"10%"}>
+                  Actions
+                </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
@@ -462,9 +427,8 @@ export const VendorListTable = (props: any) => {
                                 }}
                               >
                                 <ListItemIcon>
-                                  {selectedValues[vendor?.shops[0]]?.icon || (
-                                    <Setting />
-                                  )}
+                                  {selectedValues[vendor?.shops[0]]?.icon ||
+                                    shop_data[index]?.icon || <Setting />}
                                 </ListItemIcon>
                                 <ListItemText
                                   disableTypography
@@ -478,13 +442,17 @@ export const VendorListTable = (props: any) => {
                                       >
                                         {(
                                           selectedValues[vendor?.shops[0]]
-                                            ?.name || "Settings"
+                                            ?.name ||
+                                          shop_data[index]?.approvalStatus ||
+                                          "loading"
                                         )
                                           .charAt(0)
                                           .toUpperCase() +
                                           (
                                             selectedValues[vendor?.shops[0]]
-                                              ?.name || "Settings"
+                                              ?.name ||
+                                            shop_data[index]?.approvalStatus ||
+                                            "loading"
                                           ).slice(1)}
                                       </Typography>
                                     </>
@@ -553,7 +521,13 @@ export const VendorListTable = (props: any) => {
                           )}
                         </Stack>
                       </TableCell>
-                      <TableCell align="right" width={"20%"}>
+                      <TableCell
+                        sx={{
+                          display: "flex",
+                          flexWrap: "wrap",
+                          justifyContent: "flex-end",
+                        }}
+                      >
                         {vendor?.shops?.length === 0 ? (
                           <Box
                             sx={{
@@ -602,7 +576,7 @@ export const VendorListTable = (props: any) => {
                               alignItems: "center",
                             }}
                           >
-                            <div
+                            {/* <div
                               onClick={() =>
                                 handleDetail({
                                   id: vendor.shops[0],
@@ -618,7 +592,7 @@ export const VendorListTable = (props: any) => {
                                 label="Shop Details"
                                 color="primary"
                               />
-                            </div>
+                            </div> */}
                             <IconButton
                               onClick={() =>
                                 handlevendorDelete({
@@ -635,7 +609,7 @@ export const VendorListTable = (props: any) => {
                             <IconButton
                               onClick={() =>
                                 handleDetail({
-                                  id: vendor?._id,
+                                  id: vendor.shops[0],
                                 })
                               }
                             >

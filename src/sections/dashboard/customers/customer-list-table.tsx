@@ -27,6 +27,7 @@ import { getInitials } from "src/utils/get-initials";
 import axios from "axios";
 import toast from "react-hot-toast";
 import {
+  CircularProgress,
   InputAdornment,
   OutlinedInput,
   Skeleton,
@@ -49,42 +50,69 @@ export const CustomerListTable = (props: any) => {
 
   const [deleteuser] = useDeleteuserMutation();
 
-  const FetchAddress = async (id: any, index: any) => {
-    const userIndex = CustomerAPI()?.findIndex((item: any) => item._id === id);
-
-    if (userIndex === index) {
-      try {
-        const url = `https://thingproxy.freeboard.io/fetch/https://nominatim.openstreetmap.org/reverse?format=json&lat=${
-          CustomerAPI()[index].location.Latitude
-        }&lon=${
-          CustomerAPI()[index].location.Longitude
-        }&zoom=18&addressdetails=1`;
-        const response = await fetch(url, {
-          headers: {
-            "Accept-Language": "en-US,en;q=0.9",
-          },
-        });
-        const data = await response.json();
-
-        if (response.ok && data.display_name) {
-          setAddress((prev) => {
-            return {
-              ...prev,
-              [index]: {
-                address: data.display_name,
-              },
-            };
-          });
-        } else {
-          console.log("error");
+  useEffect(() => {
+    const fetchAddress = async () => {
+      data?.user?.map(async (user: any, index: number) => {
+        try {
+          const lat = user?.location?.Latitude;
+          const lon = user?.location.Longitude;
+          const response = await axios.get(
+            `https://thingproxy.freeboard.io/fetch/https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`
+          );
+          if (response.data) {
+            setAddress((prev) => {
+              return {
+                ...prev,
+                [index]: {
+                  address: response.data?.display_name,
+                },
+              };
+            });
+          }
+        } catch (error) {
+          console.error("Error fetching address:", error);
         }
-      } catch (error) {
-        console.error("Error fetching address:", error);
-      }
-    }
+      });
+    };
+    fetchAddress();
+  }, [data]);
 
-    return userIndex;
-  };
+  // const FetchAddress = async (id: any, index: any) => {
+  //   const userIndex = CustomerAPI()?.findIndex((item: any) => item._id === id);
+
+  //   if (userIndex === index) {
+  //     try {
+  //       const url = `https://thingproxy.freeboard.io/fetch/https://nominatim.openstreetmap.org/reverse?format=json&lat=${
+  //         CustomerAPI()[index].location.Latitude
+  //       }&lon=${
+  //         CustomerAPI()[index].location.Longitude
+  //       }&zoom=18&addressdetails=1`;
+  //       const response = await fetch(url, {
+  //         headers: {
+  //           "Accept-Language": "en-US,en;q=0.9",
+  //         },
+  //       });
+  //       const data = await response.json();
+
+  //       if (response.ok && data.display_name) {
+  //         setAddress((prev) => {
+  //           return {
+  //             ...prev,
+  //             [index]: {
+  //               address: data.display_name,
+  //             },
+  //           };
+  //         });
+  //       } else {
+  //         console.log("error");
+  //       }
+  //     } catch (error) {
+  //       console.error("Error fetching address:", error);
+  //     }
+  //   }
+
+  //   return userIndex;
+  // };
 
   const pages = [5, 10, 25];
   const [page, setPage] = useState(0);
@@ -197,7 +225,7 @@ export const CustomerListTable = (props: any) => {
     return (
       data &&
       filter
-        .fn(isSuccess && data.user)
+        .fn(data?.user)
         ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
     );
   };
@@ -249,7 +277,7 @@ export const CustomerListTable = (props: any) => {
                 SkeletonTable()
               ) : isSuccess && CustomerAPI().length > 0 ? (
                 CustomerAPI()?.map((customer: any, index: any) => {
-                  FetchAddress(customer._id, index);
+                  // FetchAddress(customer._id, index);
                   return (
                     <TableRow hover key={customer._id}>
                       <TableCell>
@@ -295,7 +323,12 @@ export const CustomerListTable = (props: any) => {
                       </TableCell>
                       <TableCell>
                         {/* {customer?.locationName || "Loading..."} */}
-                        {Address[index]?.address || "Loading..."}
+                        {/* {Address[index]?.address || "Loading..."} */}
+                        {Address[index]?.address ? (
+                          Address[index]?.address
+                        ) : (
+                          <CircularProgress size={20} color="primary" />
+                        )}
                       </TableCell>
                       <TableCell>{customer?.role.toUpperCase()}</TableCell>
                       <TableCell align="right">

@@ -110,25 +110,25 @@ export const ShopDetail = ({ shopId }: any) => {
               <PropertyListItem
                 align={align}
                 label="VendorShop Name"
-                value={data.shop?.Pharmacyname}
+                value={data?.shop?.Pharmacyname}
               />
               <Divider />
               <PropertyListItem
                 align={align}
                 label="License Number"
-                value={data.shop?.licences}
+                value={data?.shop?.licences}
               />
               <Divider />
               <PropertyListItem
                 align={align}
                 label="Pharmacy Address"
-                value={data.shop?.Pharmacyaddress}
+                value={data?.shop?.Pharmacyaddress}
               />
               <Divider />
               <PropertyListItem
                 align={align}
                 label="CNIC"
-                value={data.shop?.Cnic}
+                value={data?.shop?.Cnic}
               />
               <Divider />
               <PropertyListItem align={align} label="ShopID">
@@ -136,7 +136,7 @@ export const ShopDetail = ({ shopId }: any) => {
               </PropertyListItem>
               <Divider />
               <PropertyListItem align={align} label="Shop Products">
-                {data.shop?.isapproved === "false" && (
+                {data?.shop?.isapproved === "false" && (
                   <Chip
                     clickable
                     size="small"
@@ -144,7 +144,7 @@ export const ShopDetail = ({ shopId }: any) => {
                     label={"Shop has not been approved"}
                   />
                 )}
-                {data.shop?.isapproved === "approved" && (
+                {data?.shop?.isapproved === "approved" && (
                   <Chip
                     component={RouterLink}
                     href={paths.superadmin.vendors.productlist.replace(
@@ -157,7 +157,7 @@ export const ShopDetail = ({ shopId }: any) => {
                     label={"View Product"}
                   />
                 )}
-                {data.shop?.isapproved === "Canceled" && (
+                {data?.shop?.isapproved === "Canceled" && (
                   <Chip
                     clickable
                     size="small"
@@ -165,7 +165,7 @@ export const ShopDetail = ({ shopId }: any) => {
                     label={"Shop not Registered"}
                   />
                 )}
-                {data.shop?.isapproved === "blocked" && (
+                {data?.shop?.isapproved === "blocked" && (
                   <Chip
                     clickable
                     size="small"
@@ -187,7 +187,7 @@ export const ShopDetail = ({ shopId }: any) => {
             <Divider />
             <PropertyList>
               <PropertyListItem align={align} label="Approved">
-                {data.shop?.isapproved === "false" && (
+                {data?.shop?.isapproved === "false" && (
                   <Chip
                     size="small"
                     color="secondary"
@@ -197,13 +197,13 @@ export const ShopDetail = ({ shopId }: any) => {
                     }
                   />
                 )}
-                {data.shop?.isapproved === "approved" && (
+                {data?.shop?.isapproved === "approved" && (
                   <Chip
                     size="small"
                     color="success"
                     label={
-                      data.shop?.isapproved.charAt(0).toUpperCase() +
-                      data.shop.isapproved.slice(1)
+                      data?.shop?.isapproved.charAt(0).toUpperCase() +
+                      data?.shop.isapproved.slice(1)
                     }
                   />
                 )}
@@ -212,8 +212,8 @@ export const ShopDetail = ({ shopId }: any) => {
                     size="small"
                     color="error"
                     label={
-                      data.shop?.isapproved.charAt(0).toUpperCase() +
-                      data.shop?.isapproved.slice(1)
+                      data?.shop?.isapproved
+                      // data?.shop?.isapproved.slice(1)
                     }
                   />
                 )}
@@ -222,8 +222,8 @@ export const ShopDetail = ({ shopId }: any) => {
                     size="small"
                     color="warning"
                     label={
-                      data.shop?.isapproved.charAt(0).toUpperCase() +
-                      data.shop.isapproved.slice(1)
+                      data?.shop?.isapproved.charAt(0).toUpperCase() +
+                      data?.shop.isapproved.slice(1)
                     }
                   />
                 )}
@@ -232,13 +232,13 @@ export const ShopDetail = ({ shopId }: any) => {
               <PropertyListItem
                 align={align}
                 label="Total Medicines"
-                value={data.shop?.Medicines.length.toString()}
+                value={data?.shop?.Medicines.length.toString()}
               />
               <Divider />
               <PropertyListItem
                 align={align}
                 label="Orders"
-                value={data.shop?.Orders.length.toString()}
+                value={data?.shop?.Orders.length.toString()}
               />
               <Divider />
               <PropertyListItem
@@ -248,7 +248,7 @@ export const ShopDetail = ({ shopId }: any) => {
               />
               <Divider />
               <PropertyListItem align={align} label="UserID">
-                <Chip size="small" label={data.shop?.user} />
+                <Chip size="small" label={data?.shop?.user} />
               </PropertyListItem>
               <Divider />
             </PropertyList>

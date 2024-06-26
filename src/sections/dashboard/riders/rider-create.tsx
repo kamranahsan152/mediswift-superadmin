@@ -39,7 +39,6 @@ const schema = Yup.object().shape({
 });
 
 export const RiderCreateForm = () => {
-  const authToken = localStorage.getItem("token");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const router = useNavigate();

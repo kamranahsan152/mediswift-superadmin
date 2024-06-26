@@ -13,7 +13,18 @@ const Error404Page = lazy(() => import("src/pages/404"));
 const Error500Page = lazy(() => import("src/pages/500"));
 
 const PrivateRoute = lazy(() => import("src/redux/PrivateRoute"));
-const PublicRoute = lazy(() => import("src/redux/PublicRoute"));
+// const PublicRoute = lazy(() => import("src/redux/PublicRoute"));
+
+const PublicRoute = lazy(() =>
+  import("src/redux/PublicRoute").then((module) => ({
+    default: module.PublicRoute,
+  }))
+);
+const IndexPublicRoute = lazy(() =>
+  import("src/redux/PublicRoute").then((module) => ({
+    default: module.IndexPublicRoute,
+  }))
+);
 
 const HomePage = lazy(() => import("src/pages/index"));
 const AdminListPage = lazy(() => import("src/pages/dashboard/admin/list"));
@@ -57,9 +68,13 @@ const PaymentPage = lazy(() => import("src/pages/paymentgateway"));
 export const routes: RouteObject[] = [
   {
     element: (
-      <MarketingLayout>
-        <Outlet />
-      </MarketingLayout>
+      <IndexPublicRoute>
+        <MarketingLayout>
+          <Suspense>
+            <Outlet />
+          </Suspense>
+        </MarketingLayout>
+      </IndexPublicRoute>
     ),
     children: [
       {

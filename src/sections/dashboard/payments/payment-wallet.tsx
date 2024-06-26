@@ -38,14 +38,25 @@ const formatedBalance = (balance: any) => {
 };
 
 const PaymentWallet: React.FC = () => {
-  const { data, isLoading, isError, isSuccess } =
-    useGetAllTransactionsQuery("");
+  const {
+    data,
+    isLoading,
+    refetch: refetchTransactions,
+    isError,
+    isSuccess,
+  } = useGetAllTransactionsQuery("");
   const {
     data: walletData,
+    refetch: refetchWallet,
     isLoading: isWalletLoading,
     isError: isWalletError,
     isSuccess: isWalletSuccess,
   } = useWalletQuery("");
+
+  useEffect(() => {
+    refetchTransactions();
+    refetchWallet();
+  }, [refetchTransactions, refetchWallet]);
 
   // const [totalTransactions, settotalTransactions] = useState(
   //   (data && data.totalTransactions) || 0

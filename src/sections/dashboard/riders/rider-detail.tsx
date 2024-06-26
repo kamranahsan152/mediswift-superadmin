@@ -20,6 +20,14 @@ export const RiderDetail = ({ RiderId }: any) => {
   const align = mdUp ? "horizontal" : "vertical";
   const { data, isLoading } = useGetRiderByIdQuery({ id: RiderId });
 
+  const [userData, setdata] = useState(data?.data || {});
+
+  useEffect(() => {
+    if (data) {
+      setdata(data?.data);
+    }
+  }, [data]);
+
   return (
     <>
       <Stack
@@ -33,7 +41,7 @@ export const RiderDetail = ({ RiderId }: any) => {
             {isLoading ? (
               <Skeleton variant="text" width={"60%"} />
             ) : (
-              data.data?._id
+              userData?._id
             )}
           </Typography>
           <Stack
@@ -64,7 +72,7 @@ export const RiderDetail = ({ RiderId }: any) => {
               {isLoading ? (
                 <Skeleton variant="text" width={"80%"} />
               ) : (
-                <Chip size="small" color="primary" label={data.data?._id} />
+                <Chip size="small" color="primary" label={userData?._id} />
               )}
             </Box>
           </Stack>
@@ -128,25 +136,25 @@ export const RiderDetail = ({ RiderId }: any) => {
               <PropertyListItem
                 align={align}
                 label="Rider Name"
-                value={data.data?.name}
+                value={userData?.name}
               />
               <Divider />
               <PropertyListItem
                 align={align}
                 label="Phone Number#"
-                value={data.data?.phoneNumber}
+                value={userData?.phoneNumber}
               />
               <Divider />
               <PropertyListItem
                 align={align}
                 label="Email address"
-                value={data.data?.email}
+                value={userData?.email}
               />
               <Divider />
               <PropertyListItem
                 align={align}
                 label="Home address"
-                value={data.data?.address}
+                value={userData?.address}
               />
               <Divider />
               <PropertyListItem align={align} label="Role" value={"RIDER"} />
@@ -154,19 +162,19 @@ export const RiderDetail = ({ RiderId }: any) => {
               <PropertyListItem
                 align={align}
                 label="Driving Licence"
-                value={data.data?.DrivingLicence}
+                value={userData?.DrivingLicence}
               />
               <Divider />
               <PropertyListItem
                 align={align}
                 label="CNIC"
-                value={data.data?.Cnic}
+                value={userData?.Cnic}
               />
               <Divider />
               <PropertyListItem
                 align={align}
                 label="Total Orders"
-                value={data.data?.orders?.length.toString()}
+                value={userData?.orders?.length?.toString()}
               />
               <Divider />
             </PropertyList>

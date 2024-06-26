@@ -12,7 +12,6 @@ import { PropertyList } from "src/components/property-list";
 import { PropertyListItem } from "src/components/property-list-item";
 import SvgIcon from "@mui/material/SvgIcon";
 import UserIcon from "@untitled-ui/icons-react/build/esm/UserCheck01";
-import axios from "axios";
 import { useGetUserByIdQuery } from "src/redux/reducer";
 
 export const AdminDetail = ({ AdminId }: any) => {
@@ -20,6 +19,14 @@ export const AdminDetail = ({ AdminId }: any) => {
   const align = mdUp ? "horizontal" : "vertical";
 
   const { isLoading, data } = useGetUserByIdQuery({ id: AdminId });
+  const [userData, setdata] = useState(data?.data || {});
+
+  useEffect(() => {
+    if (data) {
+      setdata(data?.data);
+    }
+  }, [data]);
+
   return (
     <>
       <Stack
@@ -33,7 +40,7 @@ export const AdminDetail = ({ AdminId }: any) => {
             {isLoading ? (
               <Skeleton variant="text" width={"60%"} />
             ) : (
-              data.data?._id
+              userData?._id
             )}
           </Typography>
           <Stack
@@ -64,7 +71,7 @@ export const AdminDetail = ({ AdminId }: any) => {
               {isLoading ? (
                 <Skeleton variant="text" width={"80%"} />
               ) : (
-                <Chip size="small" color="primary" label={data.data?._id} />
+                <Chip size="small" color="primary" label={userData?._id} />
               )}
             </Box>
           </Stack>
@@ -115,25 +122,25 @@ export const AdminDetail = ({ AdminId }: any) => {
               <PropertyListItem
                 align={align}
                 label="Admin Name"
-                value={data.data?.name}
+                value={userData?.name}
               />
               <Divider />
               <PropertyListItem
                 align={align}
                 label="Phone Number#"
-                value={data.data?.phoneNumber}
+                value={userData?.phoneNumber}
               />
               <Divider />
               <PropertyListItem
                 align={align}
                 label="Email address"
-                value={data.data?.email}
+                value={userData?.email}
               />
               <Divider />
               <PropertyListItem
                 align={align}
                 label="Role"
-                value={data.data?.role.toUpperCase()}
+                value={userData?.role?.toUpperCase()}
               />
               <Divider />
             </PropertyList>
