@@ -20,7 +20,7 @@ export const CustomerDetail = ({ customerId }: any) => {
   const { data, isLoading } = useGetUserByIdQuery({ id: customerId });
 
   const location = useLocation();
-  const address = location.state.location;
+  const address = location.state ? location.state.location : null;
 
   return (
     <>
@@ -138,7 +138,11 @@ export const CustomerDetail = ({ customerId }: any) => {
                 value={data.data?.role.toUpperCase()}
               />
               <Divider />
-              <PropertyListItem align={align} label="Address" value={address} />
+              <PropertyListItem
+                align={align}
+                label="Address"
+                value={address ? address : "Not available"}
+              />
               <Divider />
             </PropertyList>
           </Card>

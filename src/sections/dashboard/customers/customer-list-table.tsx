@@ -54,17 +54,28 @@ export const CustomerListTable = (props: any) => {
     const fetchAddress = async () => {
       data?.user?.map(async (user: any, index: number) => {
         try {
-          const lat = user?.location?.Latitude;
-          const lon = user?.location.Longitude;
-          const response = await axios.get(
-            `https://thingproxy.freeboard.io/fetch/https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`
-          );
-          if (response.data) {
+          if (user?.location?.Latitude && user?.location?.Longitude) {
+            const lat = user?.location?.Latitude;
+            const lon = user?.location?.Longitude;
+            const response = await axios.get(
+              `https://thingproxy.freeboard.io/fetch/https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18&addressdetails=1`
+            );
+            if (response.data) {
+              setAddress((prev) => {
+                return {
+                  ...prev,
+                  [index]: {
+                    address: response.data?.display_name,
+                  },
+                };
+              });
+            }
+          } else {
             setAddress((prev) => {
               return {
                 ...prev,
                 [index]: {
-                  address: response.data?.display_name,
+                  address: "Not available",
                 },
               };
             });
@@ -76,43 +87,6 @@ export const CustomerListTable = (props: any) => {
     };
     fetchAddress();
   }, [data]);
-
-  // const FetchAddress = async (id: any, index: any) => {
-  //   const userIndex = CustomerAPI()?.findIndex((item: any) => item._id === id);
-
-  //   if (userIndex === index) {
-  //     try {
-  //       const url = `https://thingproxy.freeboard.io/fetch/https://nominatim.openstreetmap.org/reverse?format=json&lat=${
-  //         CustomerAPI()[index].location.Latitude
-  //       }&lon=${
-  //         CustomerAPI()[index].location.Longitude
-  //       }&zoom=18&addressdetails=1`;
-  //       const response = await fetch(url, {
-  //         headers: {
-  //           "Accept-Language": "en-US,en;q=0.9",
-  //         },
-  //       });
-  //       const data = await response.json();
-
-  //       if (response.ok && data.display_name) {
-  //         setAddress((prev) => {
-  //           return {
-  //             ...prev,
-  //             [index]: {
-  //               address: data.display_name,
-  //             },
-  //           };
-  //         });
-  //       } else {
-  //         console.log("error");
-  //       }
-  //     } catch (error) {
-  //       console.error("Error fetching address:", error);
-  //     }
-  //   }
-
-  //   return userIndex;
-  // };
 
   const pages = [5, 10, 25];
   const [page, setPage] = useState(0);
@@ -343,7 +317,14 @@ export const CustomerListTable = (props: any) => {
                             </SvgIcon>
                           </Tooltip>
                         </IconButton>
-                        <IconButton onClick={() => handleDetail(customer?._id)}>
+                        <IconButton
+                          onClick={() =>
+                            handleDetail({
+                              id: customer._id,
+                              location: Address[index]?.address,
+                            })
+                          }
+                        >
                           <Tooltip title="Customer Detail">
                             <SvgIcon>
                               <ArrowRightIcon />

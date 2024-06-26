@@ -13,7 +13,7 @@ export const API = createApi({
       return headers;
     },
   }),
-  tagTypes: ["Admin", "Shop", "Rider", "Payment"],
+  tagTypes: ["Admin", "Shop", "Rider", "Payment", "User"],
   endpoints: (builder) => ({
     //login
     Login: builder.mutation({
@@ -72,10 +72,12 @@ export const API = createApi({
         url: `useradmin/${id}`,
         method: "DELETE",
       }),
+      invalidatesTags: ["User"],
     }),
     //customer
     getAllCustomers: builder.query({
       query: () => "allusersadmins",
+      providesTags: ["User"],
     }),
     //vendor
     getAllVendorsProducts: builder.query({
