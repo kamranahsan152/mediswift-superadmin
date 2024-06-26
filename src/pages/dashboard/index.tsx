@@ -101,7 +101,7 @@ const Page = () => {
                 </div>
               </Stack>
             </Grid>
-            <Grid xs={12} md={3}>
+            {/* <Grid xs={12} md={3}>
               {isLoading || loading ? (
                 <Loading title="admins" />
               ) : (
@@ -109,7 +109,7 @@ const Page = () => {
                   <OverviewPage title="admins" count={counts?.adminCount} />
                 )
               )}
-            </Grid>
+            </Grid> */}
             <Grid xs={12} md={3}>
               {isLoading || loading ? (
                 <Loading title="vendors" />
