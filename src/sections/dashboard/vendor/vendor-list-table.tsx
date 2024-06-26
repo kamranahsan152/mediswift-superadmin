@@ -100,32 +100,49 @@ export const VendorListTable = () => {
   };
   useEffect(() => {
     if (data) {
-      data?.vendor?.map(async (vendor: any, index: number) => {
-        if (vendor?.shops?.length > 0) {
-          const id = vendor?.shops[0];
-          const { data } = await trigger({ id });
+      const fetchData = async () => {
+        const updatedShopData = await Promise.all(
+          data.vendor.map(async (vendor: any, index: any) => {
+            if (vendor?.shops?.length > 0) {
+              const id = vendor.shops[0];
+              const { data } = await trigger({ id });
 
-          let icon = <Done />;
+              let icon = <Done />;
 
-          if (data?.shop?.isapproved === "blocked") {
-            icon = <Block />;
-          } else if (data?.shop?.isapproved === "Canceled") {
-            icon = <Cancel />;
-          }
+              if (data?.shop?.isapproved === "blocked") {
+                icon = <Block />;
+              } else if (data?.shop?.isapproved === "Canceled") {
+                icon = <Cancel />;
+              }
 
-          setShopData((prevShopData: any) => {
-            return {
-              ...prevShopData,
-              [index]: {
+              return {
+                index,
                 approvalStatus: data?.shop?.isapproved,
                 icon: icon,
-              },
-            };
-          });
-        }
-      });
+              };
+            }
+            return null;
+          })
+        );
+
+        // Filter out any null values (vendors without shops)
+        const validShopData = updatedShopData.filter((item) => item !== null);
+
+        // Transform array to object based on the index
+        const shopDataObject = validShopData.reduce((acc, item) => {
+          acc[item.index] = {
+            approvalStatus: item.approvalStatus,
+            icon: item.icon,
+          };
+          return acc;
+        }, {});
+
+        setShopData(shopDataObject);
+      };
+
+      fetchData();
     }
-  }, [trigger, data]);
+  }, [data, trigger]);
 
   const pages = [5, 10, 25];
   const [page, setPage] = useState(0);

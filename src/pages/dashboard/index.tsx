@@ -15,20 +15,65 @@ import { OverviewBanner } from "src/sections/dashboard/overview/overview-banner"
 import { OverviewEvents } from "src/sections/dashboard/overview/overview-events";
 import { OverviewInbox } from "src/sections/dashboard/overview/overview-inbox";
 import { OverviewTransactions } from "src/sections/dashboard/overview/overview-transactions";
-import { OverviewPendingIssues } from "src/sections/dashboard/overview/overview-pending-issues";
 import { OverviewSubscriptionUsage } from "src/sections/dashboard/overview/overview-subscription-usage";
 import { OverviewHelp } from "src/sections/dashboard/overview/overview-help";
 import { OverviewJobs } from "src/sections/dashboard/overview/overview-jobs";
-import { OverviewOpenTickets } from "src/sections/dashboard/overview/overview-open-tickets";
 import { OverviewTips } from "src/sections/dashboard/overview/overview-tips";
-import { OverviewCustomer } from "src/sections/dashboard/overview/overview-customers";
+import { OverviewPage } from "src/sections/dashboard/overview/user-counts";
+import { useGetCountsQuery } from "src/redux/reducer";
+import { Card, CardActions, CircularProgress, Divider } from "@mui/material";
+import { useEffect, useState } from "react";
 
 const now = new Date();
 
 const Page = () => {
   const settings = useSettings();
 
+  const { isLoading, data: counts } = useGetCountsQuery("");
+
+  const [loading, setloading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setloading(false);
+    }, 1000);
+  }, []);
+
   usePageView();
+
+  const Loading = ({ title }: any) => {
+    return (
+      <>
+        <Card>
+          <Stack
+            alignItems="center"
+            direction={{
+              xs: "column",
+              sm: "row",
+            }}
+            spacing={3}
+            sx={{
+              px: 4,
+              py: 3,
+            }}
+          >
+            <div>
+              <img src="/assets/iconly/profile.svg" width={48} />
+            </div>
+            <Box sx={{ flexGrow: 1 }}>
+              <Typography color="text.secondary" variant="body2">
+                Total {title}
+              </Typography>
+              <Typography color="text.primary" variant="h4">
+                <CircularProgress size={28} color="secondary" />
+              </Typography>
+            </Box>
+          </Stack>
+          <Divider />
+        </Card>
+      </>
+    );
+  };
 
   return (
     <>
@@ -56,14 +101,41 @@ const Page = () => {
                 </div>
               </Stack>
             </Grid>
-            <Grid xs={12} md={4}>
-              <OverviewCustomer amount={31} />
+            <Grid xs={12} md={3}>
+              {isLoading || loading ? (
+                <Loading title="admins" />
+              ) : (
+                counts && (
+                  <OverviewPage title="admins" count={counts?.adminCount} />
+                )
+              )}
             </Grid>
-            <Grid xs={12} md={4}>
-              <OverviewPendingIssues amount={12} />
+            <Grid xs={12} md={3}>
+              {isLoading || loading ? (
+                <Loading title="vendors" />
+              ) : (
+                counts && (
+                  <OverviewPage title="vendors" count={counts?.vendorCount} />
+                )
+              )}
             </Grid>
-            <Grid xs={12} md={4}>
-              <OverviewOpenTickets amount={5} />
+            <Grid xs={12} md={3}>
+              {isLoading || loading ? (
+                <Loading title="customers" />
+              ) : (
+                counts && (
+                  <OverviewPage title="customers" count={counts?.adminCount} />
+                )
+              )}
+            </Grid>
+            <Grid xs={12} md={3}>
+              {isLoading || loading ? (
+                <Loading title="riders" />
+              ) : (
+                counts && (
+                  <OverviewPage title="riders" count={counts?.riderCount} />
+                )
+              )}
             </Grid>
             <Grid xs={12} md={7}>
               <OverviewBanner />

@@ -35,7 +35,7 @@ export const useSections = () => {
       {
         items: [
           {
-            title: t(tokens.nav.dashboard),
+            title: t(tokens.nav.overview),
             path: paths.superadmin.index,
             icon: (
               <SvgIcon fontSize="small">

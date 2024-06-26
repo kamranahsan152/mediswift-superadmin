@@ -11,12 +11,28 @@ import SvgIcon from "@mui/material/SvgIcon";
 import Typography from "@mui/material/Typography";
 import { paths } from "src/paths";
 
-interface OverviewCustomers {
-  amount: number;
+interface Overview {
+  count: number;
+  title: string;
 }
 
-export const OverviewCustomer: FC<OverviewCustomers> = (props) => {
-  const { amount } = props;
+export const OverviewPage: FC<Overview> = (props) => {
+  const { count, title } = props;
+
+  const getPath = (title: string) => {
+    switch (title.toLowerCase()) {
+      case "customers":
+        return paths.superadmin.customers.index;
+      case "riders":
+        return paths.superadmin.riders.list;
+      case "vendors":
+        return paths.superadmin.vendors.index;
+      case "admins":
+        return paths.superadmin.admins.list;
+      default:
+        return "#";
+    }
+  };
 
   return (
     <Card>
@@ -37,10 +53,10 @@ export const OverviewCustomer: FC<OverviewCustomers> = (props) => {
         </div>
         <Box sx={{ flexGrow: 1 }}>
           <Typography color="text.secondary" variant="body2">
-            Total Customers
+            Total {title}
           </Typography>
           <Typography color="text.primary" variant="h4">
-            {amount}
+            {count}
           </Typography>
         </Box>
       </Stack>
@@ -54,15 +70,16 @@ export const OverviewCustomer: FC<OverviewCustomers> = (props) => {
             </SvgIcon>
           }
           size="small"
-          href={paths.superadmin.customers.index}
+          href={getPath(title)}
         >
-          See all customers
+          See all {title}
         </Button>
       </CardActions>
     </Card>
   );
 };
 
-OverviewCustomer.propTypes = {
-  amount: PropTypes.number.isRequired,
+OverviewPage.propTypes = {
+  count: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
 };

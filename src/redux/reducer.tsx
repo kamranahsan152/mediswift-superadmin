@@ -74,6 +74,10 @@ export const API = createApi({
       }),
       invalidatesTags: ["User"],
     }),
+    //getCounts
+    getCounts: builder.query({
+      query: () => "getCounts",
+    }),
     //customer
     getAllCustomers: builder.query({
       query: () => "allusersadmins",
@@ -187,4 +191,5 @@ export const {
   useLazyGetShopbyIdQuery,
   useApproveShopMutation,
   useCreatePaymentMutation,
+  useGetCountsQuery,
 } = API;
