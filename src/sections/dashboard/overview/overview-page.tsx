@@ -14,10 +14,11 @@ import { paths } from "src/paths";
 interface Overview {
   count: number;
   title: string;
+  svgName: string;
 }
 
 export const OverviewPage: FC<Overview> = (props) => {
-  const { count, title } = props;
+  const { count, title, svgName } = props;
 
   const getPath = (title: string) => {
     switch (title.toLowerCase()) {
@@ -29,6 +30,8 @@ export const OverviewPage: FC<Overview> = (props) => {
         return paths.superadmin.vendors.index;
       case "admins":
         return paths.superadmin.admins.list;
+      case "products":
+        return paths.superadmin.products.index;
       default:
         return "#";
     }
@@ -49,7 +52,7 @@ export const OverviewPage: FC<Overview> = (props) => {
         }}
       >
         <div>
-          <img src="/assets/iconly/profile.svg" width={48} />
+          <img src={`/assets/iconly/${svgName}.svg`} width={48} />
         </div>
         <Box sx={{ flexGrow: 1 }}>
           <Typography color="text.secondary" variant="body2">
@@ -82,4 +85,5 @@ export const OverviewPage: FC<Overview> = (props) => {
 OverviewPage.propTypes = {
   count: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
+  svgName: PropTypes.string.isRequired,
 };

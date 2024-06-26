@@ -157,6 +157,10 @@ export const API = createApi({
       query: () => "alltransactions",
       providesTags: ["Payment"],
     }),
+    getStats: builder.query({
+      query: ({ startDate, endDate }) =>
+        `stats?startDate=${startDate}&endDate=${endDate}`,
+    }),
   }),
 });
 
@@ -192,4 +196,5 @@ export const {
   useApproveShopMutation,
   useCreatePaymentMutation,
   useGetCountsQuery,
+  useGetStatsQuery,
 } = API;
