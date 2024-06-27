@@ -77,6 +77,7 @@ export const API = createApi({
     //getCounts
     getCounts: builder.query({
       query: () => "getCounts",
+      providesTags: ["Rider", "Shop", "User"],
     }),
     //customer
     getAllCustomers: builder.query({

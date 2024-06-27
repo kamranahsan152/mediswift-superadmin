@@ -64,10 +64,10 @@ export const ShopListTable = () => {
     return (
       data &&
       filter
-        .fn(isSuccess && data.result)
+        .fn(data && data?.result)
         ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
     );
-  }, [data, filter, isSuccess, page, rowsPerPage]);
+  }, [data, filter, page, rowsPerPage]);
 
   const [searchTerm, setSearchTerm] = useState("");
   useEffect(() => {
@@ -245,14 +245,14 @@ export const ShopListTable = () => {
                 <TableCell>Cnic</TableCell>
                 <TableCell>Approval</TableCell>
                 <TableCell width={"20%"}>Location</TableCell>
-                <TableCell
+                {/* <TableCell
                   width={"16%"}
                   sx={{
                     textAlign: "center",
                   }}
                 >
                   Total Medicines
-                </TableCell>
+                </TableCell> */}
                 <TableCell align="right">Actions</TableCell>
               </TableRow>
             </TableHead>
@@ -354,13 +354,13 @@ export const ShopListTable = () => {
                           <CircularProgress size={20} color="primary" />
                         )}
                       </TableCell>
-                      <TableCell
+                      {/* <TableCell
                         sx={{
                           textAlign: "center",
                         }}
                       >
                         {shop?.Medicines?.length}
-                      </TableCell>
+                      </TableCell> */}
                       <TableCell align="right">
                         <IconButton
                           onClick={() => handleDeleteShop({ id: shop._id })}

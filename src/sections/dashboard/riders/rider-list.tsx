@@ -19,7 +19,6 @@ import InfoIcon from "@mui/icons-material/InfoOutlined";
 import { Scrollbar } from "src/components/scrollbar";
 import { paths } from "src/paths";
 import { getInitials } from "src/utils/get-initials";
-import axios from "axios";
 import toast from "react-hot-toast";
 import {
   InputAdornment,
@@ -302,7 +301,7 @@ export const RiderList = (props: any) => {
                   </TableCell>
                 </TableRow>
               )}
-              {isError && data.length === 0 && (
+              {isError && data?.length === 0 && (
                 <TableRow>
                   <TableCell
                     colSpan={8}

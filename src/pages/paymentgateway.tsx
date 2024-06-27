@@ -26,6 +26,7 @@ import toast from "react-hot-toast";
 import { Logo2 } from "src/components/logo2";
 import LoadingButton from "@mui/lab/LoadingButton";
 import { useUserInfoQuery, useVerifyTokenQuery } from "src/redux/reducer";
+import { useUserData } from "src/types/global";
 
 const Error401Page = lazy(() => import("src/pages/401"));
 
@@ -71,6 +72,8 @@ const CheckoutForm = ({ sessionId }: any) => {
 
   const stripe = useStripe();
   const elements = useElements();
+
+  console.log(items);
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -120,15 +123,15 @@ const CheckoutForm = ({ sessionId }: any) => {
 
   const admin_charges = totalPrice * adminfree;
 
-  const { data, isSuccess: isVerifySuccess } = useVerifyTokenQuery("");
+  const user = useUserData();
 
-  const {
-    data: userInfo,
-    isLoading,
-    isError,
-  } = useUserInfoQuery({
-    id: isVerifySuccess && data?.decoded?.user?.id,
-  });
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+  }, []);
 
   if (isLoading) {
     return (
@@ -153,7 +156,7 @@ const CheckoutForm = ({ sessionId }: any) => {
       </Box>
     );
   }
-  if (isError) {
+  if (!user) {
     return (
       <Box
         sx={{
@@ -233,9 +236,9 @@ const CheckoutForm = ({ sessionId }: any) => {
                 mb: 2,
               }}
             >
-              {items.map((item: any) => (
+              {items.map((item: any, index: any) => (
                 <Box
-                  key={item.product_id}
+                  key={item._id}
                   sx={{
                     display: "flex",
                     mt: 0.5,
@@ -247,13 +250,27 @@ const CheckoutForm = ({ sessionId }: any) => {
                     sx={{ mt: 1 }}
                     color="success"
                     size="small"
-                    label={item.product_id}
+                    label={item._id}
                   />
                   <Typography sx={{ mt: 1 }} variant="subtitle1">
-                    Rs {formatedBalance(item.product_price)}
+                    Rs {formatedBalance(item?.price)} x {item?.quantity}
                   </Typography>
                 </Box>
               ))}
+              <div
+                style={{
+                  display: "flex",
+                  flexWrap: "wrap",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography variant="h6" sx={{ mt: 1 }}>
+                  SubTotal
+                </Typography>
+                <Typography variant="h6" sx={{ mt: 1 }}>
+                  Rs {formatedBalance(totalPrice)}
+                </Typography>
+              </div>
               <div
                 style={{
                   display: "flex",
@@ -285,7 +302,7 @@ const CheckoutForm = ({ sessionId }: any) => {
                 id="email"
                 name="email"
                 label="Email"
-                value={userInfo?.user.email}
+                value={user?.email}
                 type="email"
                 fullWidth
                 margin="normal"
@@ -302,7 +319,7 @@ const CheckoutForm = ({ sessionId }: any) => {
                 id="name"
                 name="name"
                 label="Cardholder name"
-                value={userInfo?.user.name}
+                value={user?.name}
                 type="text"
                 fullWidth
                 margin="normal"

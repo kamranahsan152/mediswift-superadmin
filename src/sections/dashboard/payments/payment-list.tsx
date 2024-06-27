@@ -60,6 +60,49 @@ export const PaymentList = () => {
   const align = mdUp ? "horizontal" : "vertical";
 
   const { isLoading, isSuccess, data, isError } = useGetAllPaymentsQuery("");
+
+  const [total_price, setTotal_price] = useState<{
+    [key: string]: { totalPrice: number; orderItems: any[] };
+  }>({});
+
+  useEffect(() => {
+    if (data) {
+      data
+        ?.filter((elem: any) => elem.paymentStatus === false)
+        ?.map((value: any, index: any) => {
+          const priceArray = value.products.map((product: any) =>
+            product.orderItem.reduce(
+              (sum: any, item: any) => sum + item.price * item.quantity,
+              0
+            )
+          );
+
+          const orderItems = value.products.map((product: any) =>
+            product?.orderItem.reduce((item: any) => item)
+          );
+
+          const totalPrice = priceArray.reduce(
+            (sum: any, total: any) => sum + total,
+            0
+          );
+          console.log("check:", totalPrice);
+          console.log("OrderItems:", orderItems);
+          setTotal_price((prev: any) => {
+            return {
+              ...prev,
+              [index]: {
+                totalPrice: totalPrice,
+                orderItems: orderItems,
+              },
+            };
+          });
+        });
+    }
+  }, []);
+
+  console.log(data);
+  console.log(total_price);
+
   const pages = [5, 10, 25];
   const [page, setPage] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(pages[page]);
@@ -78,6 +121,21 @@ export const PaymentList = () => {
     fn: (items) => items,
   });
 
+  const totalsPriceCount =
+    data &&
+    data
+      ?.filter((elem: any) => elem.paymentStatus === false)
+      ?.map((order: any) =>
+        order.products.map((product: any) =>
+          product.orderItem.reduce(
+            (sum: any, item: any) => sum + item.price * item.quantity,
+            0
+          )
+        )
+      );
+
+  console.log(totalsPriceCount);
+
   const PaymentsAPI = () => {
     const dataCheck =
       data &&
@@ -87,7 +145,7 @@ export const PaymentList = () => {
     return (
       data &&
       filter
-        .fn(isSuccess && dataCheck)
+        .fn(dataCheck)
         ?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
     );
   };
@@ -341,10 +399,7 @@ export const PaymentList = () => {
                               fontWeight: "bold",
                             }}
                           >
-                            Rs{" "}
-                            {parseFloat(
-                              calculateTotalPrice().toString()
-                            ).toFixed(2)}
+                            Rs {total_price[index]?.totalPrice?.toFixed(2)}
                           </span>
                         ) : (
                           <>
@@ -497,16 +552,11 @@ export const PaymentList = () => {
                                   (item: any) => item
                                 );
 
-                                const totalPrice: any = items.reduce(
-                                  (sum: any, elem: any) =>
-                                    sum + elem.product_price,
-                                  0
-                                );
                                 router("/paymentgateway", {
                                   state: {
                                     // vendorId: payment?.vender_shop_id,
-                                    items: items,
-                                    totalPrice: totalPrice,
+                                    items: total_price[index]?.orderItems,
+                                    totalPrice: total_price[index]?.totalPrice,
                                   },
                                 });
                                 handleClick({
