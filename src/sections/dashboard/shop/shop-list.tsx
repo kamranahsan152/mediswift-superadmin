@@ -244,7 +244,7 @@ export const ShopListTable = () => {
                 <TableCell>Shop Name</TableCell>
                 <TableCell>Cnic</TableCell>
                 <TableCell>Approval</TableCell>
-                <TableCell width={"20%"}>Location</TableCell>
+                <TableCell width={"30%"}>Location</TableCell>
                 {/* <TableCell
                   width={"16%"}
                   sx={{

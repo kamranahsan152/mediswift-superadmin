@@ -39,6 +39,7 @@ import DeleteIcon from "@mui/icons-material/DeleteOutlineRounded";
 import Block from "@mui/icons-material/BlockRounded";
 import Done from "@mui/icons-material/CheckCircleRounded";
 import Cancel from "@mui/icons-material/CancelRounded";
+import False from "@mui/icons-material/RemoveCircle";
 import SearchMdIcon from "@untitled-ui/icons-react/build/esm/SearchMd";
 import { useRouter } from "src/hooks/use-router";
 import {
@@ -99,10 +100,14 @@ export const VendorListTable = () => {
     );
   };
   useEffect(() => {
-    if (data) {
-      const fetchData = async () => {
+    if (!data) {
+      return;
+    }
+
+    const fetchData = async () => {
+      try {
         const updatedShopData = await Promise.all(
-          data.vendor.map(async (vendor: any, index: any) => {
+          data?.vendor?.map(async (vendor: any, index: any) => {
             if (vendor?.shops?.length > 0) {
               const id = vendor.shops[0];
               const { data } = await trigger({ id });
@@ -113,6 +118,8 @@ export const VendorListTable = () => {
                 icon = <Block />;
               } else if (data?.shop?.isapproved === "Canceled") {
                 icon = <Cancel />;
+              } else if (data?.shop?.isapproved === "false") {
+                icon = <False />;
               }
 
               return {
@@ -125,10 +132,8 @@ export const VendorListTable = () => {
           })
         );
 
-        // Filter out any null values (vendors without shops)
         const validShopData = updatedShopData.filter((item) => item !== null);
 
-        // Transform array to object based on the index
         const shopDataObject = validShopData.reduce((acc, item) => {
           acc[item.index] = {
             approvalStatus: item.approvalStatus,
@@ -138,10 +143,12 @@ export const VendorListTable = () => {
         }, {});
 
         setShopData(shopDataObject);
-      };
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
 
-      fetchData();
-    }
+    fetchData();
   }, [data, trigger]);
 
   const pages = [5, 10, 25];

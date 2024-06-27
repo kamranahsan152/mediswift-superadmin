@@ -48,9 +48,7 @@ import toast from "react-hot-toast";
 
 export const PaymentList = () => {
   const [open, setOpen] = React.useState(false);
-
   const [view_id, setview_id] = useState("");
-
   const handleClickOpen = ({ view_id }: any) => {
     setOpen(true);
     setview_id(view_id);
@@ -85,8 +83,8 @@ export const PaymentList = () => {
             (sum: any, total: any) => sum + total,
             0
           );
-          console.log("check:", totalPrice);
-          console.log("OrderItems:", orderItems);
+          // console.log("check:", totalPrice);
+          // console.log("OrderItems:", orderItems);
           setTotal_price((prev: any) => {
             return {
               ...prev,
@@ -98,10 +96,7 @@ export const PaymentList = () => {
           });
         });
     }
-  }, []);
-
-  console.log(data);
-  console.log(total_price);
+  }, [data]);
 
   const pages = [5, 10, 25];
   const [page, setPage] = useState(0);
@@ -133,8 +128,6 @@ export const PaymentList = () => {
           )
         )
       );
-
-  console.log(totalsPriceCount);
 
   const PaymentsAPI = () => {
     const dataCheck =
@@ -225,73 +218,6 @@ export const PaymentList = () => {
   };
 
   const router = useNavigate();
-  const [sessionId, setSessionId] = useState<string | null>(null);
-  const [createPayment] = useCreatePaymentMutation();
-  // const router = useNavigate();
-
-  const handleClick = async ({ vendorId }: any) => {
-    try {
-      const body = {
-        id: vendorId,
-      };
-      const reponse = await createPayment({ body }).unwrap();
-      setSessionId(reponse.clientSecret);
-    } catch (error) {
-      console.log(error.error);
-      toast.error(error.error);
-      router("/cancel", { state: { paymentStatus: error.error } });
-    }
-
-    // const response = await fetch(
-    //   `http://localhost:4000/api/v1/create-payment-intent/${vendorId}`,
-    //   {
-    //     headers: {
-    //       Authorization: `${authtoken}`,
-    //     },
-    //   }
-    // );
-    // const data = await response.json();
-    // if (response.ok) {
-    //   setSessionId(data.clientSecret);
-    // } else {
-    //   // console.clear();
-    //   toast.error(data.error);
-    //   router("/cancel", { state: { paymentStatus: data.error } });
-    // }
-  };
-
-  //make payment
-
-  // const makePayment = async ({ vendorId }: any) => {
-  //   const stripe = await loadStripe(
-  //     "pk_test_51PGnioRqcwiTK3aHFsVV9NAE5wfXd991qUXlU6uHGLUYBIhNLTxSPwnSB4L6XZBgDkVuBsDelZwIAX5cm3nGrlTc00ZCUGtNL0"
-  //   );
-
-  //   const response = await fetch(
-  //     `http://localhost:4000/api/v1/create-payment/${vendorId}`,
-  //     {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json",
-  //         authorization: `${authToken}`,
-  //       },
-  //     }
-  //   );
-
-  //   const session = await response.json();
-
-  //   if (session.error) {
-  //     toast.error(session.error);
-  //     router("/cancel", { state: { paymentStatus: session.error } });
-  //   } else {
-  //     const result = stripe?.redirectToCheckout({
-  //       sessionId: session.id,
-  //     });
-  //     if ((await result)?.error) {
-  //       console.log((await result)?.error);
-  //     }
-  //   }
-  // };
 
   return (
     <>
@@ -342,14 +268,6 @@ export const PaymentList = () => {
                 SkeletonTable()
               ) : isSuccess && PaymentsAPI()?.length > 0 ? (
                 PaymentsAPI()?.map((payment: any, index: any) => {
-                  const calculateTotalPrice = () => {
-                    let totalPrice = 0;
-                    payment?.products.forEach((product: any) => {
-                      totalPrice += product.product_price;
-                    });
-                    return totalPrice;
-                  };
-
                   return (
                     <TableRow hover key={index}>
                       <TableCell>
@@ -534,36 +452,15 @@ export const PaymentList = () => {
                             variant="outlined"
                             color="error"
                             clickable
-                            onClick={() =>
-                              // makePayment({
-                              //   vendorId: payment?.vender_shop_id,
-                              // })
-
-                              {
-                                const data = PaymentsAPI()?.filter(
-                                  (item: any) =>
-                                    item.vender_shop_id ===
-                                    payment?.vender_shop_id
-                                );
-
-                                const [products] = data;
-
-                                const items = products.products.map(
-                                  (item: any) => item
-                                );
-
-                                router("/paymentgateway", {
-                                  state: {
-                                    // vendorId: payment?.vender_shop_id,
-                                    items: total_price[index]?.orderItems,
-                                    totalPrice: total_price[index]?.totalPrice,
-                                  },
-                                });
-                                handleClick({
+                            onClick={() => {
+                              router("/paymentgateway", {
+                                state: {
                                   vendorId: payment?.vender_shop_id,
-                                });
-                              }
-                            }
+                                  items: total_price[index]?.orderItems,
+                                  totalPrice: total_price[index]?.totalPrice,
+                                },
+                              });
+                            }}
                             label="Pay now"
                           />
                         </Tooltip>

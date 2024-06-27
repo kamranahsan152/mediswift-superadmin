@@ -24,11 +24,6 @@ const now = new Date();
 const Page = () => {
   const settings = useSettings();
 
-  // let startDate = "2024-06-01";
-  const endDate = "2024-06-30";
-
-  const { data: stateData } = useGetStatsQuery("");
-
   const { isLoading, data: counts } = useGetCountsQuery("");
   console.log(counts);
 

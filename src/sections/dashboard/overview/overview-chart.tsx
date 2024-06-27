@@ -1,8 +1,10 @@
 import React, { FC, useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { useTheme } from "@mui/material/styles";
-import { format, subDays, eachDayOfInterval } from "date-fns";
+import { format, eachDayOfInterval } from "date-fns";
 import { useGetStatsQuery } from "src/redux/reducer";
+import { CircularProgress, Box } from "@mui/material";
+import { Container } from "@mui/system";
 
 interface OverViewChartProps {
   startDate: string;
@@ -13,14 +15,21 @@ export const OverViewChartPage: FC<OverViewChartProps> = ({
   startDate,
   endDate,
 }) => {
-  console.log(startDate, endDate);
-
   const theme = useTheme();
   const {
     data: apiData,
     error,
     isLoading,
   } = useGetStatsQuery({ startDate, endDate });
+
+  const [loading, setloading] = useState(true);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setloading(false);
+    }, 2000);
+  }, []);
+
   const [series, setSeries] = useState<any[]>([]);
   const [options, setOptions] = useState<any>({
     chart: {
@@ -29,22 +38,13 @@ export const OverViewChartPage: FC<OverViewChartProps> = ({
           chart.windowResizeHandler();
         },
       },
-      height: 305,
-      type: "area",
+      height: 350,
+      type: "line",
       toolbar: {
         show: false,
       },
       zoom: {
         enabled: false,
-      },
-      dropShadow: {
-        enabled: true,
-        enabledOnSeries: undefined,
-        top: 5,
-        left: 0,
-        blur: 3,
-        color: "#000",
-        opacity: 0.15,
       },
     },
     dataLabels: {
@@ -53,9 +53,13 @@ export const OverViewChartPage: FC<OverViewChartProps> = ({
     stroke: {
       width: [3, 3, 3],
       curve: "smooth",
-      dashArray: [0, 8],
+      dashArray: [0, 0, 0],
     },
-    colors: ["rgb(74, 119, 240)", "#fdc530", theme.palette.secondary.main], // Example colors based on MUI theme
+    colors: [
+      theme.palette.success.main,
+      theme.palette.primary.main,
+      theme.palette.secondary.main,
+    ],
     title: {
       align: "left",
       style: {
@@ -70,66 +74,38 @@ export const OverViewChartPage: FC<OverViewChartProps> = ({
       horizontalAlign: "center",
       fontWeight: 600,
       fontSize: "12px",
-      tooltipHoverFormatter: function (
-        val: string,
-        opts: {
-          w: {
-            globals: { series: { [x: string]: { [x: string]: string } } };
-          };
-          seriesIndex: string | number;
-          dataPointIndex: string | number;
-        }
-      ) {
-        return (
-          val +
-          " - " +
-          opts.w.globals.series[opts.seriesIndex][opts.dataPointIndex] +
-          ""
-        );
-      },
       labels: {
         colors: theme.palette.text.primary,
       },
       markers: {
-        width: 9,
-        height: 9,
-        strokeWidth: 0,
-        radius: 12,
-        offsetX: 0,
-        offsetY: 0,
+        width: 10,
+        height: 10,
       },
     },
     markers: {
-      discrete: [],
+      size: 4,
       hover: {
         sizeOffset: 6,
       },
     },
     xaxis: {
-      categories: [], // Will be populated dynamically based on fetched data
+      categories: [],
       labels: {
         show: true,
         style: {
           colors: theme.palette.text.secondary,
-          fontSize: "11px",
+          fontSize: "12px",
           fontWeight: 600,
-          cssClass: "apexcharts-xaxis-label",
         },
-        rotate: -90,
+        rotate: -45,
       },
       axisBorder: {
-        show: false,
-        color: "rgba(119, 119, 142, 0.05)",
-        offsetX: 0,
-        offsetY: 0,
+        show: true,
+        color: theme.palette.divider,
       },
       axisTicks: {
-        show: false,
-        borderType: "solid",
-        color: "rgba(119, 119, 142, 0.05)",
-        width: 6,
-        offsetX: 0,
-        offsetY: 0,
+        show: true,
+        color: theme.palette.divider,
       },
     },
     yaxis: {
@@ -137,9 +113,8 @@ export const OverViewChartPage: FC<OverViewChartProps> = ({
         show: true,
         style: {
           colors: theme.palette.text.secondary,
-          fontSize: "11px",
+          fontSize: "12px",
           fontWeight: 600,
-          cssClass: "apexcharts-xaxis-label",
         },
       },
     },
@@ -147,29 +122,19 @@ export const OverViewChartPage: FC<OverViewChartProps> = ({
       y: [
         {
           title: {
-            formatter: function (val: string) {
-              return val + " (count)";
-            },
+            formatter: (val: string) => `${val} (count)`,
           },
         },
       ],
     },
     grid: {
       show: true,
-      borderColor: "rgba(119, 119, 142, 0.1)",
+      borderColor: theme.palette.divider,
       strokeDashArray: 4,
     },
     fill: {
-      type: ["gradient", "solid"],
-      opacity: [0.05, 1],
-      gradient: {
-        inverseColors: false,
-        shade: "dark",
-        type: "vertical",
-        opacityFrom: 0.3,
-        opacityTo: 0.2,
-        stops: [0, 100],
-      },
+      type: "solid",
+      opacity: [0.8, 0.8, 0.8],
     },
   });
 
@@ -182,7 +147,6 @@ export const OverViewChartPage: FC<OverViewChartProps> = ({
 
       const usersSeries = {
         name: "Users",
-        type: "line",
         data: categories.map((category) => {
           const found = apiData?.users?.find(
             (item: any) => item._id === category
@@ -193,7 +157,6 @@ export const OverViewChartPage: FC<OverViewChartProps> = ({
 
       const vendorsSeries = {
         name: "Vendors",
-        type: "line",
         data: categories.map((category) => {
           const found = apiData?.vendors?.find(
             (item: any) => item._id === category
@@ -204,7 +167,6 @@ export const OverViewChartPage: FC<OverViewChartProps> = ({
 
       const ridersSeries = {
         name: "Riders",
-        type: "line",
         data: categories.map((category) => {
           const found = apiData?.riders?.find(
             (item: any) => item._id === category
@@ -224,18 +186,27 @@ export const OverViewChartPage: FC<OverViewChartProps> = ({
     }
   }, [apiData, startDate, endDate]);
 
-  if (isLoading) {
-    return <p>Loading...</p>;
+  if (isLoading || loading) {
+    return (
+      <Container>
+        <Box
+          display="flex"
+          justifyContent="center"
+          alignItems="center"
+          height="350px"
+        >
+          <CircularProgress size={40} color="primary" />
+        </Box>
+      </Container>
+    );
   }
 
   return (
-    <>
-      <ReactApexChart
-        options={options}
-        series={series}
-        type="line"
-        height={350}
-      />
-    </>
+    <ReactApexChart
+      options={options}
+      series={series}
+      type="line"
+      height={350}
+    />
   );
 };

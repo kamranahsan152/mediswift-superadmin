@@ -21,6 +21,10 @@ import { paths } from "src/paths";
 import { getInitials } from "src/utils/get-initials";
 import toast from "react-hot-toast";
 import {
+  Alert,
+  Button,
+  CardContent,
+  Divider,
   InputAdornment,
   OutlinedInput,
   Skeleton,
@@ -33,7 +37,9 @@ import {
   useDeleteRiderMutation,
   useGetallRidersQuery,
 } from "src/redux/reducer";
-
+import ChevronDownIcon from "@untitled-ui/icons-react/build/esm/ChevronDown";
+import ChevronRightIcon from "@untitled-ui/icons-react/build/esm/ChevronRight";
+import RiderUpdateForm from "./rider-update";
 export const RiderList = (props: any) => {
   const { data, isLoading, isSuccess, isError, refetch } =
     useGetallRidersQuery("");
@@ -45,6 +51,20 @@ export const RiderList = (props: any) => {
   }>({
     fn: (items) => items,
   });
+
+  const [currentRider, setCurrentRider] = useState<string | null>(null);
+  const handleRiderToggle = useCallback((rider: string): void => {
+    setCurrentRider((prevRider) => {
+      if (prevRider === rider) {
+        return null;
+      }
+
+      return rider;
+    });
+  }, []);
+  const handleRiderClose = useCallback((): void => {
+    setCurrentRider(null);
+  }, []);
 
   const pages = [5, 10, 25];
   const [page, setPage] = useState(0);
@@ -190,6 +210,7 @@ export const RiderList = (props: any) => {
           <Table sx={{ minWidth: 600 }}>
             <TableHead>
               <TableRow>
+                <TableCell />
                 <TableCell width={"30%"}>Name</TableCell>
                 <TableCell>Phone Number</TableCell>
                 <TableCell>CNIC</TableCell>
@@ -202,9 +223,39 @@ export const RiderList = (props: any) => {
                 SkeletonTable()
               ) : isSuccess && RiderAPI()?.length > 0 ? (
                 RiderAPI()?.map((rider: any, index: any) => {
+                  const isCurrent = rider?._id === currentRider;
                   return (
                     <Fragment key={index}>
                       <TableRow hover>
+                        <TableCell
+                          padding="checkbox"
+                          sx={{
+                            ...(isCurrent && {
+                              position: "relative",
+                              "&:after": {
+                                position: "absolute",
+                                content: '" "',
+                                top: 0,
+                                left: 0,
+                                backgroundColor: "primary.main",
+                                width: 3,
+                                height: "calc(100% + 1px)",
+                              },
+                            }),
+                          }}
+                        >
+                          <IconButton
+                            onClick={() => handleRiderToggle(rider?._id)}
+                          >
+                            <SvgIcon>
+                              {isCurrent ? (
+                                <ChevronDownIcon />
+                              ) : (
+                                <ChevronRightIcon />
+                              )}
+                            </SvgIcon>
+                          </IconButton>
+                        </TableCell>
                         <TableCell>
                           <Stack
                             alignItems="center"
@@ -269,6 +320,66 @@ export const RiderList = (props: any) => {
                           </IconButton>
                         </TableCell>
                       </TableRow>
+
+                      {isCurrent && (
+                        <TableRow>
+                          <TableCell
+                            colSpan={7}
+                            sx={{
+                              p: 0,
+                              position: "relative",
+                              "&:after": {
+                                position: "absolute",
+                                content: '" "',
+                                top: 0,
+                                left: 0,
+                                backgroundColor: "primary.main",
+                                width: 3,
+                                height: "calc(100% + 1px)",
+                              },
+                            }}
+                          >
+                            {/* Update portion */}
+                            <CardContent>
+                              <RiderUpdateForm
+                                riderData={rider}
+                                riderId={rider?._id}
+                                handleRiderClose={handleRiderClose}
+                              />
+                            </CardContent>
+                            <Divider />
+                            <Stack
+                              alignItems="center"
+                              direction="row"
+                              justifyContent="space-between"
+                              sx={{ p: 2 }}
+                            >
+                              <Stack
+                                alignItems="center"
+                                direction="row"
+                                spacing={2}
+                              >
+                                <Button
+                                  color="inherit"
+                                  onClick={handleRiderClose}
+                                >
+                                  Cancel
+                                </Button>
+                              </Stack>
+                              <div>
+                                <Button
+                                  onClick={() =>
+                                    handleRiderDelete({ id: rider?.id })
+                                  }
+                                  color="error"
+                                >
+                                  Delete product
+                                </Button>
+                              </div>
+                            </Stack>
+                          </TableCell>
+                        </TableRow>
+                      )}
                     </Fragment>
                   );
                 })

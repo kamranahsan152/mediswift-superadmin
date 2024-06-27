@@ -137,6 +137,14 @@ export const API = createApi({
       }),
       invalidatesTags: ["Rider"],
     }),
+    updateRider: builder.mutation({
+      query: ({ body, id }) => ({
+        url: `update-rider/${id}`,
+        method: "PUT",
+        body,
+      }),
+      invalidatesTags: ["Rider"],
+    }),
     //payment
     getAllPayments: builder.query({
       query: () => "paymentlist",
@@ -198,4 +206,5 @@ export const {
   useCreatePaymentMutation,
   useGetCountsQuery,
   useGetStatsQuery,
+  useUpdateRiderMutation,
 } = API;

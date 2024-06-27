@@ -25,7 +25,11 @@ import { Navigate, useLocation, useNavigate, useParams } from "react-router";
 import toast from "react-hot-toast";
 import { Logo2 } from "src/components/logo2";
 import LoadingButton from "@mui/lab/LoadingButton";
-import { useUserInfoQuery, useVerifyTokenQuery } from "src/redux/reducer";
+import {
+  useCreatePaymentMutation,
+  useUserInfoQuery,
+  useVerifyTokenQuery,
+} from "src/redux/reducer";
 import { useUserData } from "src/types/global";
 
 const Error401Page = lazy(() => import("src/pages/401"));
@@ -37,8 +41,31 @@ const stripePromise = loadStripe(
 const Page: React.FC = () => {
   const location = useLocation();
   const state = location.state;
-  // const vendorId = state?.vendorId;
-  const sessionId = state?.sessionId;
+  const vendorId = state?.vendorId;
+  // const sessionId = state?.sessionId;
+  const [sessionId, setSessionId] = useState<string | null>(null);
+  const [createPayment] = useCreatePaymentMutation();
+  const router = useNavigate();
+
+  useEffect(() => {
+    const fetchSession = async () => {
+      try {
+        const body = {
+          id: vendorId,
+        };
+        const reponse = await createPayment({ body }).unwrap();
+
+        console.log(reponse);
+
+        setSessionId(reponse.clientSecret);
+      } catch (error: any) {
+        console.log(error);
+        // toast.error(error.error);
+        router("/cancel", { state: { paymentStatus: error.data.error } });
+      }
+    };
+    fetchSession();
+  }, [sessionId]);
 
   // fetchSession();
 
