@@ -54,19 +54,19 @@ const reviews: Review[] = [
   {
     author: "Nayab Ali",
     message:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ducimus quas distinctio similique doloremque. Ipsa facilis possimus, repellat aliquid enim sit nemo ratione, accusantium nobis totam dolor iste quasi animi neque.",
+      "Nayab Ali is our dedicated Backend Developer, responsible for the robust and efficient functioning of our server-side logic. He specializes in database management, server-side scripting, and API development to ensure seamless operations.",
     stars: 4,
   },
   {
     author: "Sehar Safdar",
     message:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ducimus quas distinctio similique doloremque. Ipsa facilis possimus, repellat aliquid enim sit nemo ratione, accusantium nobis totam dolor iste quasi animi neque.",
+      "Sehar Safdar is our talented UI Designer who excels in creating visually appealing and user-friendly interfaces. She combines creativity with a deep understanding of user experience principles to craft designs that enhance the overall user journey.",
     stars: 5,
   },
   {
-    author: "Kamran Mughal",
+    author: "Kamran Ahsan",
     message:
-      "Lorem, ipsum dolor sit amet consectetur adipisicing elit. Ducimus quas distinctio similique doloremque. Ipsa facilis possimus, repellat aliquid enim sit nemo ratione, accusantium nobis totam dolor iste quasi animi neque.",
+      "Kamran Ahsan is a skilled Web Developer who brings our digital projects to life. With expertise in front-end technologies, he ensures that our websites are not only functional but also responsive and visually engaging.",
     stars: 5,
   },
 ];
@@ -102,15 +102,13 @@ export const HomeReviews: FC = () => (
       <Stack spacing={8} sx={{ py: "50px" }}>
         <Stack spacing={2}>
           <Typography align="center" variant="h3">
-            Some Reviews from our Users
+            Superadmin Capabilities
           </Typography>
           <Typography align="center" color="text.secondary" variant="subtitle1">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quibusdam
-            similique reiciendis, qui rem ipsam mollitia voluptatibus
-            praesentium nobis numquam minus quos amet illum ea recusandae nisi
-            et porro esse fugit maiores reprehenderit, accusamus iusto? Nulla
-            sed deleniti, quam tenetur perferendis, quis ut ea atque labore
-            distinctio praesentium possimus ipsum ex.
+            Our superadmins have comprehensive access to all modules, enabling
+            them to manage every aspect of the system. They can add, delete, and
+            update products, as well as oversee all orders, ensuring smooth and
+            efficient operations across the platform.
           </Typography>
         </Stack>
         <Grid container spacing={3}>

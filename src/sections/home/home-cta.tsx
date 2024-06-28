@@ -21,11 +21,10 @@ export const HomeCta: FC = () => (
     <Container maxWidth="lg">
       <Stack spacing={2}>
         <Typography align="center" color="inherit" variant="h3">
-          Now Increase Your Business with us !
+          You have Access to all Resourses
         </Typography>
         <Typography align="center" color="inherit" variant="subtitle2">
-          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Repellendus
-          esse quo repellat, aperiam expedita tempora!
+          This platform allows the administration to oversee operations
         </Typography>
       </Stack>
       <Stack

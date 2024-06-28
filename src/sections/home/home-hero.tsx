@@ -42,11 +42,10 @@ export const HomeHero: FC = () => {
               fontWeight: 500,
             }}
           >
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Cupiditate
-            quam odio sapiente in accusantium magnam quo consectetur illo ad
-            quae? Officia cumque eveniet recusandae qui perferendis quia hic
-            porro impedit culpa alias? Deleniti dolor quisquam aperiam magnam
-            modi cumque a?
+            MediSwift is a comprehensive and efficient medicine delivery
+            platform designed to provide prompt and reliable service. The
+            project comprises five integral components, each fulfilling a unique
+            role within the ecosystem
           </Typography>
           <Stack
             alignItems="center"
@@ -96,11 +95,11 @@ export const HomeHero: FC = () => {
           }}
         >
           <img
-            src="/hero.jpg"
-            alt=""
+            src="/hero3.jpg"
+            alt="hero"
             style={{
               borderRadius: "10%", // round the image
-              transform: "rotateY(-30deg) rotateX(30deg) perspective(200px)", // apply 3D transformation
+              // transform: "rotateY(-30deg) rotateX(30deg) perspective(200px)", // apply 3D transformation
             }}
             width={450}
             height={450}

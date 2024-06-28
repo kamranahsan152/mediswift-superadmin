@@ -41,10 +41,13 @@ import { loadStripe } from "@stripe/stripe-js";
 import { useNavigate } from "react-router";
 import { GetToken } from "src/types/global";
 import {
+  API,
   useCreatePaymentMutation,
   useGetAllPaymentsQuery,
 } from "src/redux/reducer";
 import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { AppDispatch } from "src/redux/store";
 
 export const PaymentList = () => {
   const [open, setOpen] = React.useState(false);
@@ -58,7 +61,11 @@ export const PaymentList = () => {
   const align = mdUp ? "horizontal" : "vertical";
 
   const { isLoading, isSuccess, data, isError } = useGetAllPaymentsQuery("");
+  const dispatch = useDispatch<AppDispatch>();
 
+  useEffect(() => {
+    dispatch(API.util.invalidateTags(["Payment"]));
+  }, []);
   const [total_price, setTotal_price] = useState<{
     [key: string]: { totalPrice: number; orderItems: any[] };
   }>({});
@@ -413,26 +420,26 @@ export const PaymentList = () => {
                                                   size="small"
                                                   color="default"
                                                   variant="filled"
-                                                  label={order._id}
+                                                  label={order?._id}
                                                 />
                                               </PropertyListItem>
                                               <Divider />
                                               <PropertyListItem
                                                 align={align}
                                                 label="Product Name"
-                                                value={order.name}
+                                                value={order?.name}
                                               />
                                               <Divider />
                                               <PropertyListItem
                                                 align={align}
                                                 label="Product Price"
-                                                value={order.price.toString()}
+                                                value={order?.price?.toString()}
                                               />
                                               <Divider />
                                               <PropertyListItem
                                                 align={align}
                                                 label="Quantity"
-                                                value={order.quantity.toString()}
+                                                value={order?.quantity?.toString()}
                                               />
                                             </PropertyList>
                                           </div>
