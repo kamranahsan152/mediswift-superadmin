@@ -1,10 +1,10 @@
 {
-  "name": "Super-admin",
+  "name": "super_admin",
   "version": "6.4.0",
   "author": "Devias",
   "homepage": "https://devias.io",
   "private": true,
-  "proxy": "https://weak-erin-lizard-slip.cyclic.app",
+  "proxy": "https://fypbackend-uma4.onrender.com",
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
