@@ -8,7 +8,7 @@ export const paths = {
     register: "/auth/jwt/register",
   },
 
-  BASE_URL: "http://localhost:4000/api/v1/",
+  BASE_URL: process.env.REACT_APP_BASE_URL,
   success: "/success",
   cancel: "/cancel",
 
