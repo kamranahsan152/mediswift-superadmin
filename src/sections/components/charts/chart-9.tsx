@@ -1,12 +1,12 @@
-import type { FC } from 'react';
-import type { ApexOptions } from 'apexcharts';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
-import { useTheme } from '@mui/material/styles';
+import type { FC } from "react";
+import type { ApexOptions } from "apexcharts";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import { useTheme } from "@mui/material/styles";
 
-import { Chart } from 'src/components/chart';
+import { Chart } from "src/components/chart";
 
 type ChartSeries = {
   name: string;
@@ -15,84 +15,81 @@ type ChartSeries = {
 
 const chartSeries: ChartSeries = [
   {
-    name: 'New Customers',
-    data: [31, 40, 28, 51, 42, 109, 100, 120, 80, 42, 90, 140]
+    name: "New Customers",
+    data: [31, 40, 28, 51, 42, 109, 100, 120, 80, 42, 90, 140],
   },
   {
-    name: 'Up/Cross-Selling',
-    data: [11, 32, 45, 32, 34, 52, 41, 80, 96, 140, 30, 100]
-  }
+    name: "Up/Cross-Selling",
+    data: [11, 32, 45, 32, 34, 52, 41, 80, 96, 140, 30, 100],
+  },
 ];
 
-const useChartOptions = (): ApexOptions => {
+const useChartOptions = (): any => {
   const theme = useTheme();
 
   return {
     chart: {
-      background: 'transparent',
+      background: "transparent",
       stacked: false,
       toolbar: {
-        show: false
-      }
+        show: false,
+      },
     },
-    colors: [
-      theme.palette.primary.main,
-      theme.palette.warning.main
-    ],
+    colors: [theme.palette.primary.main, theme.palette.warning.main],
     dataLabels: {
-      enabled: false
+      enabled: false,
     },
     fill: {
-      type: 'solid',
-      opacity: 0
+      type: "solid",
+      opacity: 0,
     },
     grid: {
       borderColor: theme.palette.divider,
       strokeDashArray: 2,
       xaxis: {
         lines: {
-          show: false
-        }
+          show: false,
+        },
       },
       yaxis: {
         lines: {
-          show: true
-        }
-      }
+          show: true,
+        },
+      },
     },
     markers: {
       strokeColors: theme.palette.background.paper,
-      size: 6
+      size: 6,
     },
     stroke: {
-      curve: 'straight',
-      width: 2
+      curve: "straight",
+      width: 2,
     },
     theme: {
-      mode: theme.palette.mode
+      mode: theme.palette.mode,
     },
     xaxis: {
       axisBorder: {
-        show: false
+        show: false,
       },
       axisTicks: {
-        show: false
+        show: false,
       },
       categories: [
-        'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'May',
-        'Jun',
-        'Jul',
-        'Aug',
-        'Sep',
-        'Oct',
-        'Nov',
-        'Dec'
-      ]
-    }
+        "Jan",
+        "Feb",
+        "Mar",
+        "Apr",
+        "May",
+        "Jun",
+        "Jul",
+        "Aug",
+        "Sep",
+        "Oct",
+        "Nov",
+        "Dec",
+      ],
+    },
   };
 };
 
@@ -102,10 +99,9 @@ export const Chart9: FC = () => {
   return (
     <Box
       sx={{
-        backgroundColor: (theme) => theme.palette.mode === 'dark'
-          ? 'neutral.800'
-          : 'neutral.100',
-        p: 3
+        backgroundColor: (theme) =>
+          theme.palette.mode === "dark" ? "neutral.800" : "neutral.100",
+        p: 3,
       }}
     >
       <Card>

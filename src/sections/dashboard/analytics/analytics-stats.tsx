@@ -1,40 +1,40 @@
-import type { FC, ReactNode } from 'react';
-import PropTypes from 'prop-types';
-import type { ApexOptions } from 'apexcharts';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import Divider from '@mui/material/Divider';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import { useTheme } from '@mui/material/styles';
+import type { FC, ReactNode } from "react";
+import PropTypes from "prop-types";
+import type { ApexOptions } from "apexcharts";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import Divider from "@mui/material/Divider";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import { useTheme } from "@mui/material/styles";
 
-import { Chart } from 'src/components/chart';
+import { Chart } from "src/components/chart";
 
-const useChartOptions = (): ApexOptions => {
+const useChartOptions = (): any => {
   const theme = useTheme();
 
   return {
     chart: {
-      background: 'transparent',
+      background: "transparent",
       toolbar: {
-        show: false
+        show: false,
       },
       zoom: {
-        enabled: false
-      }
+        enabled: false,
+      },
     },
     colors: [theme.palette.primary.main],
     dataLabels: {
-      enabled: false
+      enabled: false,
     },
     fill: {
       gradient: {
         opacityFrom: 0.5,
         opacityTo: 0,
-        stops: [0, 100]
+        stops: [0, 100],
       },
-      type: 'gradient'
+      type: "gradient",
     },
     grid: {
       show: false,
@@ -42,33 +42,33 @@ const useChartOptions = (): ApexOptions => {
         bottom: 0,
         left: 0,
         right: 0,
-        top: 0
-      }
+        top: 0,
+      },
     },
     stroke: {
-      curve: 'smooth',
-      width: 3
+      curve: "smooth",
+      width: 3,
     },
     theme: {
-      mode: theme.palette.mode
+      mode: theme.palette.mode,
     },
     tooltip: {
-      enabled: false
+      enabled: false,
     },
     xaxis: {
       axisBorder: {
-        show: false
+        show: false,
       },
       axisTicks: {
-        show: false
+        show: false,
       },
       labels: {
-        show: false
-      }
+        show: false,
+      },
     },
     yaxis: {
-      show: false
-    }
+      show: false,
+    },
   };
 };
 
@@ -96,20 +96,14 @@ export const AnalyticsStats: FC<AnalyticsStatsProps> = (props) => {
         spacing={2}
         sx={{
           px: 3,
-          py: 2
+          py: 2,
         }}
       >
         <div>
-          <Typography
-            color="text.secondary"
-            variant="body2"
-          >
+          <Typography color="text.secondary" variant="body2">
             {title}
           </Typography>
-          <Typography
-            sx={{ mt: 1 }}
-            variant="h5"
-          >
+          <Typography sx={{ mt: 1 }} variant="h5">
             {value}
           </Typography>
         </div>
@@ -123,9 +117,7 @@ export const AnalyticsStats: FC<AnalyticsStatsProps> = (props) => {
         </Box>
       </Stack>
       <Divider />
-      <CardActions>
-        {action}
-      </CardActions>
+      <CardActions>{action}</CardActions>
     </Card>
   );
 };
@@ -134,5 +126,5 @@ AnalyticsStats.propTypes = {
   action: PropTypes.any.isRequired,
   chartSeries: PropTypes.array.isRequired,
   title: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired
+  value: PropTypes.string.isRequired,
 };

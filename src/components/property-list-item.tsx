@@ -1,12 +1,12 @@
-import type { FC } from 'react';
-import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import type { ListItemProps } from '@mui/material/ListItem';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
+import type { FC } from "react";
+import PropTypes from "prop-types";
+import Box from "@mui/material/Box";
+import type { ListItemProps } from "@mui/material/ListItem";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import Typography from "@mui/material/Typography";
 
-type Direction = 'horizontal' | 'vertical';
+type Direction = "horizontal" | "vertical";
 
 interface PropertyListItemProps extends ListItemProps {
   align?: Direction;
@@ -15,47 +15,51 @@ interface PropertyListItemProps extends ListItemProps {
 }
 
 export const PropertyListItem: FC<PropertyListItemProps> = (props) => {
-  const { align = 'vertical', children, disableGutters, value, label, ...other } = props;
+  const {
+    align = "vertical",
+    children,
+    disableGutters,
+    value,
+    label,
+    ...other
+  } = props;
 
   return (
     <ListItem
       sx={{
         px: disableGutters ? 0 : 3,
-        py: 1.5
+        py: 1.5,
       }}
       {...other}
     >
       <ListItemText
         disableTypography
-        primary={(
+        primary={
           <Typography
-            sx={{ minWidth: align === 'vertical' ? 'inherit' : 180 }}
+            sx={{ minWidth: align === "vertical" ? "inherit" : 180 }}
             variant="subtitle2"
           >
             {label}
           </Typography>
-        )}
-        secondary={(
+        }
+        secondary={
           <Box
             sx={{
               flex: 1,
-              mt: align === 'vertical' ? 0.5 : 0
+              mt: align === "vertical" ? 0.5 : 0,
             }}
           >
             {children || (
-              <Typography
-                color="text.secondary"
-                variant="body2"
-              >
+              <Typography color="text.secondary" variant="body2">
                 {value}
               </Typography>
             )}
           </Box>
-        )}
+        }
         sx={{
-          display: 'flex',
-          flexDirection: align === 'vertical' ? 'column' : 'row',
-          my: 0
+          display: "flex",
+          flexDirection: align === "vertical" ? "column" : "row",
+          my: 0,
         }}
       />
     </ListItem>
@@ -63,9 +67,9 @@ export const PropertyListItem: FC<PropertyListItemProps> = (props) => {
 };
 
 PropertyListItem.propTypes = {
-  align: PropTypes.oneOf<Direction>(['horizontal', 'vertical']),
+  align: PropTypes.oneOf(["horizontal", "vertical"]),
   children: PropTypes.node,
   disableGutters: PropTypes.bool,
   label: PropTypes.string.isRequired,
-  value: PropTypes.string
+  value: PropTypes.string,
 };

@@ -1,69 +1,69 @@
-import type { FC } from 'react';
-import type { ApexOptions } from 'apexcharts';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Container from '@mui/material/Container';
-import Typography from '@mui/material/Typography';
-import { useTheme } from '@mui/material/styles';
+import type { FC } from "react";
+import type { ApexOptions } from "apexcharts";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import Container from "@mui/material/Container";
+import Typography from "@mui/material/Typography";
+import { useTheme } from "@mui/material/styles";
 
-import { Chart } from 'src/components/chart';
+import { Chart } from "src/components/chart";
 
 type ChartSeries = number[];
 
 const chartSeries: ChartSeries = [83];
 
-const useChartOptions = (): ApexOptions => {
+const useChartOptions = (): any => {
   const theme = useTheme();
 
   return {
     chart: {
-      background: 'transparent',
+      background: "transparent",
       stacked: false,
       toolbar: {
-        show: false
-      }
+        show: false,
+      },
     },
     colors: [theme.palette.primary.main],
     fill: {
       opacity: 1,
-      type: 'solid'
+      type: "solid",
     },
-    labels: ['System Health'],
+    labels: ["System Health"],
     plotOptions: {
       radialBar: {
         dataLabels: {
           name: {
             color: theme.palette.text.primary,
-            fontFamily: theme.typography.fontFamily
+            fontFamily: theme.typography.fontFamily,
           },
           value: {
-            color: theme.palette.text.secondary
-          }
+            color: theme.palette.text.secondary,
+          },
         },
         hollow: {
-          size: '60%'
+          size: "60%",
         },
         track: {
-          background: theme.palette.background.default
-        }
-      }
+          background: theme.palette.background.default,
+        },
+      },
     },
     states: {
       active: {
         filter: {
-          type: 'none'
-        }
+          type: "none",
+        },
       },
       hover: {
         filter: {
-          type: 'none'
-        }
-      }
+          type: "none",
+        },
+      },
     },
     theme: {
-      mode: theme.palette.mode
-    }
+      mode: theme.palette.mode,
+    },
   };
 };
 
@@ -73,10 +73,9 @@ export const Chart3: FC = () => {
   return (
     <Box
       sx={{
-        backgroundColor: (theme) => theme.palette.mode === 'dark'
-          ? 'neutral.800'
-          : 'neutral.100',
-        p: 3
+        backgroundColor: (theme) =>
+          theme.palette.mode === "dark" ? "neutral.800" : "neutral.100",
+        p: 3,
       }}
     >
       <Container maxWidth="sm">

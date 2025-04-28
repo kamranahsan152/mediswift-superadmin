@@ -1,84 +1,90 @@
-import type { FC } from 'react';
-import type { ApexOptions } from 'apexcharts';
-import ArrowRightIcon from '@untitled-ui/icons-react/build/esm/ArrowRight';
-import InfoCircleIcon from '@untitled-ui/icons-react/build/esm/InfoCircle';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
-import Container from '@mui/material/Container';
-import SvgIcon from '@mui/material/SvgIcon';
-import Tooltip from '@mui/material/Tooltip';
-import { useTheme } from '@mui/material/styles';
+import type { FC } from "react";
+import type { ApexOptions } from "apexcharts";
+import ArrowRightIcon from "@untitled-ui/icons-react/build/esm/ArrowRight";
+import InfoCircleIcon from "@untitled-ui/icons-react/build/esm/InfoCircle";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
+import Card from "@mui/material/Card";
+import CardActions from "@mui/material/CardActions";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Container from "@mui/material/Container";
+import SvgIcon from "@mui/material/SvgIcon";
+import Tooltip from "@mui/material/Tooltip";
+import { useTheme } from "@mui/material/styles";
 
-import { Chart } from 'src/components/chart';
+import { Chart } from "src/components/chart";
 
-const labels: string[] = ['Linkedin', 'Facebook', 'Instagram', 'Twitter', 'Other'];
+const labels: string[] = [
+  "Linkedin",
+  "Facebook",
+  "Instagram",
+  "Twitter",
+  "Other",
+];
 
 type ChartSeries = number[];
 
 const chartSeries: ChartSeries = [10, 10, 20, 10, 70];
 
-const useChartOptions = (): ApexOptions => {
+const useChartOptions = (): any => {
   const theme = useTheme();
 
   return {
     chart: {
-      background: 'transparent',
+      background: "transparent",
       stacked: false,
       toolbar: {
-        show: false
-      }
+        show: false,
+      },
     },
     colors: [
       theme.palette.primary.light,
       theme.palette.warning.light,
       theme.palette.success.light,
       theme.palette.info.light,
-      theme.palette.neutral[700]
+      theme.palette.neutral[700],
     ],
     dataLabels: {
-      enabled: false
+      enabled: false,
     },
     fill: {
       opacity: 1,
-      type: 'solid'
+      type: "solid",
     },
     labels,
     legend: {
       labels: {
-        colors: theme.palette.text.secondary
+        colors: theme.palette.text.secondary,
       },
-      show: true
+      show: true,
     },
     plotOptions: {
       pie: {
-        expandOnClick: false
-      }
+        expandOnClick: false,
+      },
     },
     states: {
       active: {
         filter: {
-          type: 'none'
-        }
+          type: "none",
+        },
       },
       hover: {
         filter: {
-          type: 'none'
-        }
-      }
+          type: "none",
+        },
+      },
     },
     stroke: {
-      width: 0
+      width: 0,
     },
     theme: {
-      mode: theme.palette.mode
+      mode: theme.palette.mode,
     },
     tooltip: {
-      fillSeriesColor: false
-    }
+      fillSeriesColor: false,
+    },
   };
 };
 
@@ -88,22 +94,21 @@ export const Chart8: FC = () => {
   return (
     <Box
       sx={{
-        backgroundColor: (theme) => theme.palette.mode === 'dark'
-          ? 'neutral.800'
-          : 'neutral.100',
-        p: 3
+        backgroundColor: (theme) =>
+          theme.palette.mode === "dark" ? "neutral.800" : "neutral.100",
+        p: 3,
       }}
     >
       <Container maxWidth="sm">
         <Card>
           <CardHeader
-            action={(
+            action={
               <Tooltip title="Traffic by Social Media platforms">
                 <SvgIcon>
                   <InfoCircleIcon />
                 </SvgIcon>
               </Tooltip>
-            )}
+            }
             title="Social Media Sources"
           />
           <CardContent>
@@ -114,14 +119,14 @@ export const Chart8: FC = () => {
               type="donut"
             />
           </CardContent>
-          <CardActions sx={{ justifyContent: 'flex-end' }}>
+          <CardActions sx={{ justifyContent: "flex-end" }}>
             <Button
               color="inherit"
-              endIcon={(
+              endIcon={
                 <SvgIcon>
                   <ArrowRightIcon />
                 </SvgIcon>
-              )}
+              }
               size="small"
             >
               See all

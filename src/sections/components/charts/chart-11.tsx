@@ -1,16 +1,16 @@
-import type { FC } from 'react';
-import numeral from 'numeral';
-import type { ApexOptions } from 'apexcharts';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardHeader from '@mui/material/CardHeader';
-import Container from '@mui/material/Container';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import { useTheme } from '@mui/material/styles';
+import type { FC } from "react";
+import numeral from "numeral";
+import type { ApexOptions } from "apexcharts";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
+import CardHeader from "@mui/material/CardHeader";
+import Container from "@mui/material/Container";
+import Stack from "@mui/material/Stack";
+import Typography from "@mui/material/Typography";
+import { useTheme } from "@mui/material/styles";
 
-import { Chart } from 'src/components/chart';
+import { Chart } from "src/components/chart";
 
 type ChartSeries = {
   name: string;
@@ -22,102 +22,102 @@ type ChartSeries = {
 
 const chartSeries: ChartSeries = [
   {
-    name: 'Sales',
+    name: "Sales",
     data: [
       {
-        x: 'Email',
-        y: 37530
+        x: "Email",
+        y: 37530,
       },
       {
-        x: 'Facebook',
-        y: 90590
+        x: "Facebook",
+        y: 90590,
       },
       {
-        x: 'GDN',
-        y: 52717
+        x: "GDN",
+        y: 52717,
       },
       {
-        x: 'Instagram',
-        y: 62935
+        x: "Instagram",
+        y: 62935,
       },
       {
-        x: 'Google Ads Search',
-        y: 13219
-      }
-    ]
-  }
+        x: "Google Ads Search",
+        y: 13219,
+      },
+    ],
+  },
 ];
 
-const useChartOptions = (): ApexOptions => {
+const useChartOptions = (): any => {
   const theme = useTheme();
 
   return {
     chart: {
-      background: 'transparent',
+      background: "transparent",
       stacked: false,
       toolbar: {
-        show: false
-      }
+        show: false,
+      },
     },
     colors: [
       theme.palette.primary.main,
       theme.palette.info.main,
       theme.palette.warning.main,
       theme.palette.error.main,
-      theme.palette.success.main
+      theme.palette.success.main,
     ],
     dataLabels: {
-      enabled: false
+      enabled: false,
     },
     fill: {
       opacity: 1,
-      type: 'solid'
+      type: "solid",
     },
     grid: {
       borderColor: theme.palette.divider,
       strokeDashArray: 2,
       xaxis: {
         lines: {
-          show: true
-        }
+          show: true,
+        },
       },
       yaxis: {
         lines: {
-          show: false
-        }
-      }
+          show: false,
+        },
+      },
     },
     legend: {
-      show: false
+      show: false,
     },
     plotOptions: {
       bar: {
         horizontal: true,
-        barHeight: '45',
-        distributed: true
-      }
+        barHeight: "45",
+        distributed: true,
+      },
     },
     theme: {
-      mode: theme.palette.mode
+      mode: theme.palette.mode,
     },
     tooltip: {
       y: {
-        formatter: (value: number): string => numeral(value).format('$0,0.00')
-      }
+        formatter: (value: number): string => numeral(value).format("$0,0.00"),
+      },
     },
     xaxis: {
       axisBorder: {
-        show: false
+        show: false,
       },
       axisTicks: {
-        show: false
-      }
+        show: false,
+      },
     },
     yaxis: {
       labels: {
-        show: false
-      }
-    }
+        show: false,
+      },
+    },
   };
 };
 
@@ -127,10 +127,9 @@ export const Chart11: FC = () => {
   return (
     <Box
       sx={{
-        backgroundColor: (theme) => theme.palette.mode === 'dark'
-          ? 'neutral.800'
-          : 'neutral.100',
-        p: 3
+        backgroundColor: (theme) =>
+          theme.palette.mode === "dark" ? "neutral.800" : "neutral.100",
+        p: 3,
       }}
     >
       <Container maxWidth="md">
@@ -143,34 +142,27 @@ export const Chart11: FC = () => {
               series={chartSeries}
               type="bar"
             />
-            <Stack
-              direction="row"
-              flexWrap="wrap"
-              spacing={3}
-              sx={{ mt: 3 }}
-            >
+            <Stack direction="row" flexWrap="wrap" spacing={3} sx={{ mt: 3 }}>
               {chartSeries[0].data.map((item, index) => (
                 <Stack
                   key={item.x}
                   direction="row"
                   spacing={1}
                   sx={{
-                    alignItems: 'center',
-                    display: 'flex',
-                    p: 1
+                    alignItems: "center",
+                    display: "flex",
+                    p: 1,
                   }}
                 >
                   <Box
                     sx={{
                       backgroundColor: chartOptions.colors![index],
-                      borderRadius: '50%',
+                      borderRadius: "50%",
                       height: 8,
-                      width: 8
+                      width: 8,
                     }}
                   />
-                  <Typography variant="subtitle2">
-                    {item.x}
-                  </Typography>
+                  <Typography variant="subtitle2">{item.x}</Typography>
                 </Stack>
               ))}
             </Stack>

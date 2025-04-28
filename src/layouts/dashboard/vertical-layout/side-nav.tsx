@@ -234,6 +234,6 @@ export const SideNav: FC<SideNavProps> = (props) => {
 };
 
 SideNav.propTypes = {
-  color: PropTypes.oneOf<NavColor>(["blend-in", "discrete", "evident"]),
+  color: PropTypes.node,
   sections: PropTypes.array,
 };

@@ -1,76 +1,76 @@
-import type { FC } from 'react';
-import type { ApexOptions } from 'apexcharts';
-import DotsHorizontalIcon from '@untitled-ui/icons-react/build/esm/DotsHorizontal';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardHeader from '@mui/material/CardHeader';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import SvgIcon from '@mui/material/SvgIcon';
-import Typography from '@mui/material/Typography';
-import { useTheme } from '@mui/material/styles';
+import type { FC } from "react";
+import type { ApexOptions } from "apexcharts";
+import DotsHorizontalIcon from "@untitled-ui/icons-react/build/esm/DotsHorizontal";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import CardHeader from "@mui/material/CardHeader";
+import Divider from "@mui/material/Divider";
+import IconButton from "@mui/material/IconButton";
+import SvgIcon from "@mui/material/SvgIcon";
+import Typography from "@mui/material/Typography";
+import { useTheme } from "@mui/material/styles";
 
-import { Chart } from 'src/components/chart';
+import { Chart } from "src/components/chart";
 
 type ChartSeries = number[];
 
 const chartSeries: ChartSeries = [56, 24, 20];
 
-const labels: string[] = ['Subscriptions', 'Affiliate', 'Sales'];
+const labels: string[] = ["Subscriptions", "Affiliate", "Sales"];
 
-const useChartOptions = (): ApexOptions => {
+const useChartOptions = (): any => {
   const theme = useTheme();
 
   return {
     chart: {
-      background: 'transparent',
+      background: "transparent",
       stacked: false,
       toolbar: {
-        show: false
-      }
+        show: false,
+      },
     },
     colors: [
       theme.palette.primary.main,
       theme.palette.warning.main,
-      theme.palette.info.main
+      theme.palette.info.main,
     ],
     dataLabels: {
-      enabled: false
+      enabled: false,
     },
     fill: {
       opacity: 1,
-      type: 'solid'
+      type: "solid",
     },
     labels,
     legend: {
-      show: false
+      show: false,
     },
     plotOptions: {
       pie: {
-        expandOnClick: false
-      }
+        expandOnClick: false,
+      },
     },
     states: {
       active: {
         filter: {
-          type: 'none'
-        }
+          type: "none",
+        },
       },
       hover: {
         filter: {
-          type: 'none'
-        }
-      }
+          type: "none",
+        },
+      },
     },
     stroke: {
-      show: false
+      show: false,
     },
     theme: {
-      mode: theme.palette.mode
+      mode: theme.palette.mode,
     },
     tooltip: {
-      fillSeriesColor: false
-    }
+      fillSeriesColor: false,
+    },
   };
 };
 
@@ -80,21 +80,20 @@ export const QuickStats1: FC = () => {
   return (
     <Box
       sx={{
-        backgroundColor: (theme) => theme.palette.mode === 'dark'
-          ? 'neutral.800'
-          : 'neutral.100',
-        p: 3
+        backgroundColor: (theme) =>
+          theme.palette.mode === "dark" ? "neutral.800" : "neutral.100",
+        p: 3,
       }}
     >
       <Card>
         <CardHeader
-          action={(
+          action={
             <IconButton>
               <SvgIcon>
                 <DotsHorizontalIcon />
               </SvgIcon>
             </IconButton>
-          )}
+          }
           title="Earnings Source"
         />
         <Divider />
@@ -107,31 +106,26 @@ export const QuickStats1: FC = () => {
           />
         </Box>
         <Divider />
-        <Box sx={{ display: 'flex' }}>
+        <Box sx={{ display: "flex" }}>
           {chartSeries.map((item, index) => (
             <Box
               key={index}
               sx={{
-                display: 'flex',
-                flexDirection: 'column',
+                display: "flex",
+                flexDirection: "column",
                 flexGrow: 1,
-                justifyContent: 'center',
+                justifyContent: "center",
                 px: 2,
                 py: 3,
-                textAlign: 'center',
-                '&:not(:last-of-type)': {
+                textAlign: "center",
+                "&:not(:last-of-type)": {
                   borderRight: 1,
-                  borderColor: 'divider'
-                }
+                  borderColor: "divider",
+                },
               }}
             >
-              <Typography variant="h4">
-                {item}%
-              </Typography>
-              <Typography
-                color="text.secondary"
-                variant="overline"
-              >
+              <Typography variant="h4">{item}%</Typography>
+              <Typography color="text.secondary" variant="overline">
                 {labels[index]}
               </Typography>
             </Box>

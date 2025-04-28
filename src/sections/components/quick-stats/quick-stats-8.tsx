@@ -1,15 +1,15 @@
-import type { FC } from 'react';
-import type { ApexOptions } from 'apexcharts';
-import RefreshCcw02Icon from '@untitled-ui/icons-react/build/esm/RefreshCcw02';
-import Avatar from '@mui/material/Avatar';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import Stack from '@mui/material/Stack';
-import SvgIcon from '@mui/material/SvgIcon';
-import Typography from '@mui/material/Typography';
-import { useTheme } from '@mui/material/styles';
+import type { FC } from "react";
+import type { ApexOptions } from "apexcharts";
+import RefreshCcw02Icon from "@untitled-ui/icons-react/build/esm/RefreshCcw02";
+import Avatar from "@mui/material/Avatar";
+import Box from "@mui/material/Box";
+import Card from "@mui/material/Card";
+import Stack from "@mui/material/Stack";
+import SvgIcon from "@mui/material/SvgIcon";
+import Typography from "@mui/material/Typography";
+import { useTheme } from "@mui/material/styles";
 
-import { Chart } from 'src/components/chart';
+import { Chart } from "src/components/chart";
 
 type ChartSeries = {
   name: string;
@@ -18,72 +18,72 @@ type ChartSeries = {
 
 const chartSeries: ChartSeries = [
   {
-    name: 'Conversions',
-    data: [14, 43, 98, 68, 155, 18, 8]
-  }
+    name: "Conversions",
+    data: [14, 43, 98, 68, 155, 18, 8],
+  },
 ];
 
-const useChartOptions = (): ApexOptions => {
+const useChartOptions = (): any => {
   const theme = useTheme();
 
   return {
     chart: {
-      background: 'transparent',
+      background: "transparent",
       toolbar: {
-        show: false
+        show: false,
       },
       zoom: {
-        enabled: false
-      }
+        enabled: false,
+      },
     },
     colors: [theme.palette.primary.main],
     dataLabels: {
-      enabled: false
+      enabled: false,
     },
     fill: {
       opacity: 1,
-      type: 'solid'
+      type: "solid",
     },
     grid: {
       yaxis: {
         lines: {
-          show: false
-        }
+          show: false,
+        },
       },
       xaxis: {
         lines: {
-          show: false
-        }
-      }
+          show: false,
+        },
+      },
     },
     legend: {
-      show: false
+      show: false,
     },
     stroke: {
-      width: 2
+      width: 2,
     },
     theme: {
-      mode: theme.palette.mode
+      mode: theme.palette.mode,
     },
     xaxis: {
       axisBorder: {
-        show: false
+        show: false,
       },
       axisTicks: {
-        show: false
+        show: false,
       },
       labels: {
-        show: false
-      }
+        show: false,
+      },
     },
     yaxis: {
       labels: {
-        show: false
-      }
+        show: false,
+      },
     },
     tooltip: {
-      enabled: false
-    }
+      enabled: false,
+    },
   };
 };
 
@@ -93,27 +93,18 @@ export const QuickStats8: FC = () => {
   return (
     <Box
       sx={{
-        backgroundColor: (theme) => theme.palette.mode === 'dark'
-          ? 'neutral.800'
-          : 'neutral.100',
-        p: 3
+        backgroundColor: (theme) =>
+          theme.palette.mode === "dark" ? "neutral.800" : "neutral.100",
+        p: 3,
       }}
     >
-      <Box
-        maxWidth="sm"
-        sx={{ mx: 'auto' }}
-      >
+      <Box maxWidth="sm" sx={{ mx: "auto" }}>
         <Card>
-          <Stack
-            alignItems="center"
-            direction="row"
-            spacing={2}
-            sx={{ p: 3 }}
-          >
+          <Stack alignItems="center" direction="row" spacing={2} sx={{ p: 3 }}>
             <Avatar
               sx={{
-                backgroundColor: 'primary.main',
-                color: 'primary.contrastText'
+                backgroundColor: "primary.main",
+                color: "primary.contrastText",
               }}
             >
               <SvgIcon>
@@ -121,16 +112,10 @@ export const QuickStats8: FC = () => {
               </SvgIcon>
             </Avatar>
             <Box sx={{ flexGrow: 1 }}>
-              <Typography
-                color="text.secondary"
-                noWrap
-                variant="body1"
-              >
+              <Typography color="text.secondary" noWrap variant="body1">
                 Conversions
               </Typography>
-              <Typography variant="h4">
-                361
-              </Typography>
+              <Typography variant="h4">361</Typography>
             </Box>
             <Box sx={{ maxWidth: 200 }}>
               <Chart

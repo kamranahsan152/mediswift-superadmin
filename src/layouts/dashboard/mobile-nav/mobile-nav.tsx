@@ -193,7 +193,7 @@ export const MobileNav: FC<MobileNavProps> = (props) => {
 };
 
 MobileNav.propTypes = {
-  color: PropTypes.oneOf<NavColor>(["blend-in", "discrete", "evident"]),
+  color: PropTypes.node,
   onClose: PropTypes.func,
   open: PropTypes.bool,
   sections: PropTypes.array,
